@@ -24,6 +24,60 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
+    document.addEventListener('DOMContentLoaded', function() {
+        const materialForm = document.getElementById('materialForm');
+        const materialTableBody = document.getElementById('materialTableBody');
+    
+        materialForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Previene el comportamiento predeterminado del formulario de recargar la página
+    
+            const materialName = document.getElementById('materialName').value;
+            const materialThickness = parseFloat(document.getElementById('materialThickness').value);
+    
+            // Validar que el nombre y el espesor sean válidos
+            if (materialName && !isNaN(materialThickness)) {
+                // Crear una nueva fila en la tabla
+                const row = document.createElement('tr');
+    
+                // Crear celdas para cada columna
+                const nameCell = document.createElement('td');
+                const thicknessCell = document.createElement('td');
+                const actionsCell = document.createElement('td');
+    
+                // Agregar contenido a las celdas
+                nameCell.textContent = materialName;
+                thicknessCell.textContent = materialThickness.toFixed(2);
+                actionsCell.innerHTML = `
+                    <button onclick="editRow(${thicknessCell.textContent})">Editar</button>
+                    <button onclick="deleteRow(${thicknessCell.textContent})">Eliminar</button>
+                `;
+    
+                // Agregar celdas a la fila
+                row.appendChild(nameCell);
+                row.appendChild(thicknessCell);
+                row.appendChild(actionsCell);
+    
+                // Agregar la fila a la tabla
+                materialTableBody.appendChild(row);
+    
+                // Limpiar los valores del formulario
+                document.getElementById('materialName').value = '';
+                document.getElementById('materialThickness').value = '';
+            } else {
+                alert('Por favor, ingrese un nombre de material válido y un espesor numérico.');
+            }
+        });
+    
+        // Funciones para editar y eliminar filas (a completar)
+        function editRow(thickness) {
+            // Código para editar la fila con el espesor dado
+        }
+    
+        function deleteRow(thickness) {
+            // Código para eliminar la fila con el espesor dado
+        }
+    });
+
     // Agregar evento de envío al formulario
     document.getElementById('materialForm').addEventListener('submit', function(event) {
         event.preventDefault(); // Previene el comportamiento predeterminado del formulario de recargar la página
