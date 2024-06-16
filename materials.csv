@@ -1,4 +1,4 @@
-Material,Densidad (kg/m3),Conductividad térmica (W/mK)
-Material 1,1000,0.05
-Material 2,1200,0.06
-Material 3,800,0.04
+Material Name,Density (kg/m3),Conductivity
+Material A,1000,0.2
+Material B,1200,0.3
+Material C,800,0.15

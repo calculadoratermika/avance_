@@ -17,6 +17,21 @@ document.getElementById("materialForm").addEventListener("submit", function(even
         document.getElementById("materialName").value = "";
         document.getElementById("materialThickness").value = "";
     
+    fetch('materials.csv')
+    .then(response => response.text())
+    .then(data => {
+      const rows = data.split('\n').slice(1); // Skip the header row
+      const materialNames = document.getElementById('materialNames');
+  
+      rows.forEach(row => {
+        const [name] = row.split(',');
+        const option = document.createElement('option');
+        option.value = name.trim();
+        materialNames.appendChild(option);
+      });
+    })
+    .catch(error => console.error('Error fetching materials.csv:', error));
+
         // Add event listeners to edit and delete buttons
         var editButtons = document.querySelectorAll(".edit-button");
         var deleteButtons = document.querySelectorAll(".delete-button");
