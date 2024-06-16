@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
     formTabla.addEventListener('submit', function(event) {
         event.preventDefault();
         const espesor = document.getElementById('espesor').value.trim();
-        const selectedMaterial = document.querySelector('.selected');
+        const selectedMaterial = document.querySelector('.material-item.selected');
 
         if (selectedMaterial && espesor !== '') {
             const material = selectedMaterial.textContent;
@@ -71,24 +71,30 @@ document.addEventListener('DOMContentLoaded', function() {
     materialContainer.addEventListener('drop', function(event) {
         event.preventDefault();
         const material = event.dataTransfer.getData('text/plain');
-        const materialItem = document.createElement('div');
-        materialItem.textContent = material;
-        materialItem.draggable = true;
-        materialItem.classList.add('material-item');
-        materialContainer.appendChild(materialItem);
+        const draggedElement = document.querySelector(`.material-item:contains('${material}')`);
+        if (draggedElement) {
+            materialContainer.removeChild(draggedElement);
+            materialContainer.appendChild(draggedElement);
+        }
     });
 
     materialContainer.addEventListener('dragend', function(event) {
-        const draggedMaterial = event.dataTransfer.getData('text/plain');
-        const draggedElement = document.querySelector(`.material-item:contains('${draggedMaterial}')`);
-        draggedElement.remove();
+        event.preventDefault();
+        const material = event.dataTransfer.getData('text/plain');
+        const draggedElement = Array.from(materialContainer.children).find(
+            item => item.textContent === material
+        );
+        if (draggedElement) {
+            draggedElement.remove();
+        }
     });
 
     // Selección de material
     materialContainer.addEventListener('click', function(event) {
         const selectedElement = event.target;
-        const materialItems = document.querySelectorAll('.material-item');
-        materialItems.forEach(item => item.classList.remove('selected'));
-        selectedElement.classList.add('selected');
+        if (selectedElement.classList.contains('material-item')) {
+            document.querySelectorAll('.material-item').forEach(item => item.classList.remove('selected'));
+            selectedElement.classList.add('selected');
+        }
     });
 });
