@@ -1,19 +1,3 @@
-// Fetch materials.csv and populate the datalist
-fetch('materials.csv')
-    .then(response => response.text())
-    .then(data => {
-        const rows = data.split('\n').slice(1); // Skip the header row
-        const materialNames = document.getElementById('materialNames');
-
-        rows.forEach(row => {
-            const [name] = row.split(',');
-            const option = document.createElement('option');
-            option.value = name.trim();
-            materialNames.appendChild(option);
-        });
-    })
-    .catch(error => console.error('Error fetching materials.csv:', error));
-
 // Function to handle form submission
 function handleSubmit(event) {
     event.preventDefault();
@@ -44,7 +28,6 @@ function handleSubmit(event) {
 
     const materialTableBody = document.getElementById("materialTableBody");
 
-
     editButtons.forEach(function(button) {
         button.addEventListener("click", function() {
             var row = this.parentNode.parentNode;
@@ -62,15 +45,6 @@ function handleSubmit(event) {
             console.log("Deleting material");
             // Add your delete functionality here
         });
-    });
-
-    // Add event listeners for drag and drop
-    var rows = materialTableBody.querySelectorAll("tr");
-    rows.forEach(function(row) {
-        row.draggable = true;
-        row.addEventListener("dragstart", handleDragStart);
-        row.addEventListener("dragover", handleDragOver);
-        row.addEventListener("drop", handleDrop);
     });
 }
 
@@ -103,4 +77,15 @@ function handleDrop(event) {
     sourceRow.classList.remove("dragging");
 }
 
+// Add event listeners for drag and drop
+const materialTableBody = document.getElementById("materialTableBody");
+const rows = materialTableBody.querySelectorAll("tr");
+
+rows.forEach(row => {
+  row.addEventListener("dragstart", handleDragStart);
+  row.addEventListener("dragover", handleDragOver);
+  row.addEventListener("drop", handleDrop);
+});
+
+// Add event listener for form submission
 document.getElementById("materialForm").addEventListener("submit", handleSubmit);
