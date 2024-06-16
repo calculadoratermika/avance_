@@ -3,8 +3,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const materialName = document.getElementById('materialName');
     const materialThickness = document.getElementById('materialThickness');
     const materialTable = document.getElementById('materialTable').getElementsByTagName('tbody')[0];
-
-    // Load materials from localStorage
     let materials = JSON.parse(localStorage.getItem('materials')) || [];
     renderMaterials(materials);
 
@@ -23,34 +21,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function addMaterial(name, thickness) {
         const row = document.createElement('tr');
-        row.draggable = true;
-        
+        row.draggable = true; // Make the row draggable
         const nameCell = document.createElement('td');
         nameCell.textContent = name;
         row.appendChild(nameCell);
-
         const thicknessCell = document.createElement('td');
         const thicknessInput = document.createElement('input');
         thicknessInput.type = 'number';
         thicknessInput.value = thickness;
         thicknessInput.addEventListener('input', () => showOkButton(thicknessInput));
         thicknessCell.appendChild(thicknessInput);
-
         const okButton = document.createElement('button');
-        okButton.innerHTML = '&#10003;'; // Check mark symbol
+        okButton.innerHTML = '&#10003;';
         okButton.classList.add('ok-button');
         okButton.addEventListener('click', () => updateThickness(row, thicknessInput, okButton));
         thicknessCell.appendChild(okButton);
-
         row.appendChild(thicknessCell);
-
         const actionsCell = document.createElement('td');
         const deleteButton = document.createElement('button');
         deleteButton.textContent = 'Eliminar';
         deleteButton.classList.add('delete');
         deleteButton.addEventListener('click', () => deleteMaterial(row));
         actionsCell.appendChild(deleteButton);
-        
         row.appendChild(actionsCell);
         materialTable.appendChild(row);
     }
@@ -96,4 +88,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     materialForm.addEventListener('submit', handleSubmit);
+
+    let draggedItem = null;
+
+    document.addEventListener('dragstart', function(event) {
+        draggedItem = event.target;
+        event.target.style.opacity = '0.5';
+    });
+
+    document.addEventListener('dragover', function(event) {
+        event.preventDefault();
+    });
+
+    document.addEventListener('drop', function(event) {
+        if (event.target.tagName === 'TD') {
+            event.target.parentNode.before(draggedItem);
+            draggedItem.style.opacity = '1';
+        }
+    });
 });
