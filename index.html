@@ -1,39 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="styles.css">
-    <title>Lista de Materiales de Construcción</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <title>Lista de Materiales de Construcción</title>
 </head>
 <body>
-    <h1>Lista de Materiales de Construcción</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Espesor (mm)</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody id="materialTableBody">
-            <!-- Las filas se crearán dinámicamente aquí -->
-        </tbody>
-    </table>
-    <form id="materialForm">
-        <label for="materialName">Nombre del Material:</label>
-        <input type="text" id="materialName" name="materialName" required>
-
-
-
-        <label for="materialThickness">Espesor (mm):</label>
-        <input type="number" id="materialThickness" name="materialThickness" step="any" required>
-
-
-
-        <button type="submit">Agregar Material</button>
-    </form>
-
-    <script src="script.js"></script>
+    <h1>Lista de Materiales de Construcción</h1>
+    <table id="materialTable">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Espesor (mm)</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="materialTableBody">
+            <!-- Las filas se crearán dinámicamente aquí -->
+        </tbody>
+    </table>
+    <form id="materialForm">
+        <label for="materialName">Nombre del Material:</label>
+        <input type="text" id="materialName" name="materialName" required>
+        <label for="materialThickness">Espesor (mm):</label>
+        <input type="number" id="materialThickness" name="materialThickness" step="any" required>
+        <button type="submit">Agregar Material</button>
+    </form>
+    <script src="script.js"></script>
 </body>
 </html>
