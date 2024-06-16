@@ -11,12 +11,15 @@
 
     <form id="materialForm">
             <label for="materialName">Nombre del Material:</label>
-            <input type="text" id="materialName" name="materialName" required>
+            <input list="materialNames" id="materialName" name="materialName" required>
+            <datalist id="materialNames">
+            <!-- Options will be populated dynamically from the CSV file -->
+            </datalist>
             <label for="materialThickness">Espesor (mm):</label>
             <input type="number" id="materialThickness" name="materialThickness" step="any" required>
             <button type="submit">Agregar Material</button>
         </form>
-    
+
     <table id="materialTable">
         <thead>
             <tr>
