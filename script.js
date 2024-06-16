@@ -23,6 +23,35 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     }
 
+
+    // Agregar evento de envío al formulario
+    document.getElementById('materialForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Previene el comportamiento predeterminado del formulario de recargar la página
+    
+        // Obtener los valores del formulario
+        const materialName = document.getElementById('materialName').value;
+        const materialThickness = parseFloat(document.getElementById('materialThickness').value);
+    
+        // Crear un nuevo elemento <tr> para la tabla
+        const row = document.createElement('tr');
+        row.innerHTML = `
+        <td>${materialName}</td>
+        <td>${materialThickness.toFixed(2)}</td>
+        <td>
+            <button onclick="editMaterial(${row})">Editar</button>
+            <button onclick="deleteMaterial(${row})">Eliminar</button>
+        </td>
+        `;
+    
+        // Agregar el nuevo elemento a la tabla
+        document.getElementById('materialTableBody').appendChild(row);
+    
+        // Limpiar los valores del formulario
+        document.getElementById('materialName').value = '';
+        document.getElementById('materialThickness').value = '';
+    });
+    
+    
     // Función para agregar un nuevo material a la tabla
     function addMaterial() {
         const materialName = materialNameInput.value;
@@ -110,6 +139,29 @@ document.addEventListener('DOMContentLoaded', () => {
             deleteMaterial(rowIndex);
         }
     });
+
+
+    // Agregar evento de arrastre a cada fila de la tabla
+    Array.from(document.querySelectorAll('tbody tr')).forEach(function(row, index) {
+        row.addEventListener('dragstart', function(event) {
+        event.dataTransfer.setData('text/plain', index);
+        });
+    
+        row.addEventListener('dragover', function(event) {
+        event.preventDefault();
+        });
+    
+        row.addEventListener('drop', function(event) {
+        event.preventDefault();
+        const sourceIndex = event.dataTransfer.getData('text/plain');
+        const targetIndex = Array.from(document.querySelectorAll('tbody tr')).indexOf(this);
+    
+        // Reordenar las filas de la tabla
+        const sourceRow = document.querySelectorAll('tbody tr')[sourceIndex];
+        sourceRow.parentNode.insertBefore(sourceRow, document.querySelectorAll('tbody tr')[targetIndex]);
+        });
+    });
+
 
     // Cargar las opciones de material y llenar la tabla inicialmente
     loadMaterialOptions();
