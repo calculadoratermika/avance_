@@ -4,19 +4,31 @@ document.addEventListener('DOMContentLoaded', () => {
     const densityInput = document.getElementById('densityInput');
     const conductivityInput = document.getElementById('conductivityInput');
 
-    // Leer el archivo CSV y llenar la lista desplegable
-    fetch('materials.csv')
-        .then(response => response.text())
-        .then(data => {
-            const rows = data.split('\n');
-            rows.forEach(row => {
-                const [material, density, conductivity] = row.split(',');
-                const option = document.createElement('option');
-                option.value = material.trim();
-                option.textContent = material.trim();
-                materialSelect.appendChild(option);
+    let isFirstEdit = true;
+
+    // Función para cargar los valores del archivo CSV en la lista desplegable
+    function loadMaterialOptions() {
+        fetch('materials.csv')
+            .then(response => response.text())
+            .then(data => {
+                const rows = data.split('\n');
+                rows.forEach(row => {
+                    const [material, density, conductivity] = row.split(',');
+                    const option = document.createElement('option');
+                    option.value = material.trim();
+                    option.textContent = material.trim();
+                    materialSelect.appendChild(option);
+                });
             });
-        });
+    }
+
+    // Cargar la lista desplegable al editar por primera vez el campo "Nombre del material"
+    materialForm.addEventListener('input', function(e) {
+        if (e.target.id === 'materialName' && isFirstEdit) {
+            loadMaterialOptions();
+            isFirstEdit = false;
+        }
+    });
 
     materialForm.addEventListener('submit', function(e) {
         e.preventDefault();
