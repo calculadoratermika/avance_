@@ -42,6 +42,9 @@ function handleSubmit(event) {
     var editButtons = newRow.querySelectorAll(".edit-button");
     var deleteButtons = newRow.querySelectorAll(".delete-button");
 
+    const materialTableBody = document.getElementById("materialTableBody");
+
+
     editButtons.forEach(function(button) {
         button.addEventListener("click", function() {
             var row = this.parentNode.parentNode;
