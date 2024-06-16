@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const materialContainer = document.getElementById('material-container');
+    const materialSelect = document.getElementById('material-select');
     const tablaDatos = document.getElementById('dataTable').getElementsByTagName('tbody')[0];
     const formTabla = document.getElementById('formTabla');
 
@@ -12,11 +12,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 rows.forEach(row => {
                     const material = row.trim();
                     if (material !== '') {
-                        const materialItem = document.createElement('div');
-                        materialItem.textContent = material;
-                        materialItem.draggable = true;
-                        materialItem.classList.add('material-item');
-                        materialContainer.appendChild(materialItem);
+                        const option = document.createElement('option');
+                        option.value = material;
+                        option.textContent = material;
+                        materialSelect.appendChild(option);
                     }
                 });
             })
@@ -29,6 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Función para agregar fila a la tabla
     function agregarFila(material, espesor) {
         const newRow = tablaDatos.insertRow();
+        newRow.setAttribute('draggable', true);
         newRow.innerHTML = `
             <td>${material}</td>
             <td>${espesor}</td>
@@ -40,10 +40,9 @@ document.addEventListener('DOMContentLoaded', function() {
     formTabla.addEventListener('submit', function(event) {
         event.preventDefault();
         const espesor = document.getElementById('espesor').value.trim();
-        const selectedMaterial = document.querySelector('.material-item.selected');
+        const material = materialSelect.value;
 
-        if (selectedMaterial && espesor !== '') {
-            const material = selectedMaterial.textContent;
+        if (material && espesor !== '') {
             agregarFila(material, espesor);
             document.getElementById('espesor').value = ''; // Limpiar el campo de espesor
         } else {
@@ -59,42 +58,47 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Drag and drop
-    materialContainer.addEventListener('dragstart', function(event) {
-        event.dataTransfer.setData('text/plain', event.target.textContent);
+    // Drag and drop para filas de la tabla
+    let draggedRow = null;
+
+    tablaDatos.addEventListener('dragstart', function(event) {
+        draggedRow = event.target.closest('tr');
+        event.dataTransfer.effectAllowed = 'move';
+        event.dataTransfer.setData('text/html', draggedRow.outerHTML);
+        setTimeout(() => {
+            draggedRow.classList.add('dragging');
+        }, 0);
     });
 
-    materialContainer.addEventListener('dragover', function(event) {
+    tablaDatos.addEventListener('dragover', function(event) {
         event.preventDefault();
-    });
+        event.dataTransfer.dropEffect = 'move';
 
-    materialContainer.addEventListener('drop', function(event) {
-        event.preventDefault();
-        const material = event.dataTransfer.getData('text/plain');
-        const draggedElement = document.querySelector(`.material-item:contains('${material}')`);
-        if (draggedElement) {
-            materialContainer.removeChild(draggedElement);
-            materialContainer.appendChild(draggedElement);
+        const targetRow = event.target.closest('tr');
+        if (targetRow && targetRow !== draggedRow) {
+            const bounding = targetRow.getBoundingClientRect();
+            const offset = bounding.y + (bounding.height / 2);
+
+            if (event.clientY - offset > 0) {
+                targetRow.after(draggedRow);
+            } else {
+                targetRow.before(draggedRow);
+            }
         }
     });
 
-    materialContainer.addEventListener('dragend', function(event) {
+    tablaDatos.addEventListener('drop', function(event) {
         event.preventDefault();
-        const material = event.dataTransfer.getData('text/plain');
-        const draggedElement = Array.from(materialContainer.children).find(
-            item => item.textContent === material
-        );
-        if (draggedElement) {
-            draggedElement.remove();
+        if (draggedRow) {
+            draggedRow.classList.remove('dragging');
+            draggedRow = null;
         }
     });
 
-    // Selección de material
-    materialContainer.addEventListener('click', function(event) {
-        const selectedElement = event.target;
-        if (selectedElement.classList.contains('material-item')) {
-            document.querySelectorAll('.material-item').forEach(item => item.classList.remove('selected'));
-            selectedElement.classList.add('selected');
+    tablaDatos.addEventListener('dragend', function(event) {
+        if (draggedRow) {
+            draggedRow.classList.remove('dragging');
+            draggedRow = null;
         }
     });
 });
