@@ -79,3 +79,19 @@ body {
     background-position: right 10px top 15px;
     background-size: 16px;
   }
+
+  #materialNames {
+    display: block;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 10px;
+    z-index: 1;
+  }
+  
+  #materialNames option {
+    padding: 5px;
+  }
