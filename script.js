@@ -15,49 +15,67 @@ document.addEventListener('DOMContentLoaded', () => {
                 rows.forEach(row => {
                     const [material] = row.split(',');
                     const option = document.createElement('option');
-                    option.value = material.trim();
+                    option.value = material;
+                    option.textContent = material;
                     materialList.appendChild(option);
                 });
             });
     }
 
-    // Cargar las opciones al hacer clic en el campo de nombre de material
-    materialNameInput.addEventListener('input', loadMaterialOptions);
-
-    // Manejar el envío del formulario
-    materialForm.addEventListener('submit', function(e) {
-        e.preventDefault();
+    // Función para agregar un nuevo material a la tabla
+    function addMaterial() {
         const materialName = materialNameInput.value;
-        const materialThickness = parseInt(materialThicknessInput.value);
+        const materialThickness = parseFloat(materialThicknessInput.value);
 
-        // Crear una nueva fila para la tabla
-        const newRow = materialTableBody.insertRow();
+        if (materialName && !isNaN(materialThickness)) {
+            const row = materialTableBody.insertRow();
+            const nameCell = row.insertCell(0);
+            const thicknessCell = row.insertCell(1);
+            const deleteCell = row.insertCell(2);
 
-        // Crear celdas para la nueva fila
-        const nameCell = newRow.insertCell(0);
-        const thicknessCell = newRow.insertCell(1);
-        const actionsCell = newRow.insertCell(2);
+            nameCell.textContent = materialName;
+            thicknessCell.textContent = materialThickness.toFixed(2);
 
-        // Agregar contenido a las celdas
-        nameCell.textContent = materialName;
-        thicknessCell.textContent = materialThickness;
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'Eliminar';
+            deleteButton.addEventListener('click', () => {
+                materialTableBody.removeChild(row);
+            });
 
-        // Crear botones de acción
-        const editButton = document.createElement('button');
-        editButton.textContent = 'Editar';
-        editButton.addEventListener('click', () => {
-            // Código para editar el material seleccionado
-            // ... (código para editar fila en la tabla)
-        });
+            deleteCell.appendChild(deleteButton);
 
-        const deleteButton = document.createElement('button');
-        deleteButton.textContent = 'Eliminar';
-        deleteButton.addEventListener('click', () => {
-            // Código para eliminar el material seleccionado
-            // ... (código para eliminar fila de la tabla)
-        });
+            materialNameInput.value = '';
+            materialThicknessInput.value = '';
+        } else {
+            alert('Por favor, ingrese un nombre de material válido y un espesor numérico.');
+        }
+    }
 
-        actionsCell.appendChild(editButton);
-        actionsCell.appendChild(deleteButton);
+    // Función para llenar la tabla de elementos con los elementos del archivo CSV
+    function fillTableFromCSV() {
+        fetch('materials.csv')
+            .then(response => response.text())
+            .then(data => {
+                const rows = data.split('\n');
+                rows.forEach(row => {
+                    const [material, thickness] = row.split(',');
+                    const row = materialTableBody.insertRow();
+                    const nameCell = row.insertCell(0);
+                    const thicknessCell = row.insertCell(1);
+
+                    nameCell.textContent = material;
+                    thicknessCell.textContent = parseFloat(thickness).toFixed(2);
+                });
+            });
+    }
+
+    // Agregar evento de envío al formulario
+    materialForm.addEventListener('submit', event => {
+        event.preventDefault();
+        addMaterial();
     });
+
+    // Cargar las opciones de material y llenar la tabla inicialmente
+    loadMaterialOptions();
+    fillTableFromCSV();
 });
