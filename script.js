@@ -27,21 +27,22 @@ document.addEventListener('DOMContentLoaded', () => {
         const thicknessInput = document.createElement('input');
         thicknessInput.type = 'number';
         thicknessInput.value = thickness;
-        thicknessInput.addEventListener('change', () => updateThickness(row, thicknessInput.value));
+        thicknessInput.addEventListener('input', () => showOkButton(row));
         thicknessCell.appendChild(thicknessInput);
-        
+
         const actionsCell = row.insertCell(2);
-        const editButton = document.createElement('button');
-        editButton.textContent = 'Editar';
-        editButton.classList.add('edit');
-        editButton.addEventListener('click', () => editMaterial(row));
+
+        const okButton = document.createElement('button');
+        okButton.textContent = 'OK';
+        okButton.classList.add('ok');
+        okButton.style.display = 'none';
+        okButton.addEventListener('click', () => updateThickness(row, thicknessInput.value));
+        actionsCell.appendChild(okButton);
 
         const deleteButton = document.createElement('button');
         deleteButton.textContent = 'Eliminar';
         deleteButton.classList.add('delete');
         deleteButton.addEventListener('click', () => deleteMaterial(row));
-
-        actionsCell.appendChild(editButton);
         actionsCell.appendChild(deleteButton);
     }
 
@@ -49,25 +50,9 @@ document.addEventListener('DOMContentLoaded', () => {
         materials.forEach(material => addMaterial(material.name, material.thickness));
     }
 
-    function editMaterial(row) {
-        const name = row.cells[0].textContent;
-        const thickness = row.cells[1].querySelector('input').value;
-        materialName.value = name;
-        materialThickness.value = thickness;
-        materialForm.removeEventListener('submit', handleSubmit);
-        materialForm.addEventListener('submit', function update(e) {
-            e.preventDefault();
-            row.cells[0].textContent = materialName.value;
-            row.cells[1].querySelector('input').value = materialThickness.value;
-            materials = materials.map(material => 
-                material.name === name && material.thickness == thickness ? 
-                { name: materialName.value, thickness: materialThickness.value } : material);
-            localStorage.setItem('materials', JSON.stringify(materials));
-            materialName.value = '';
-            materialThickness.value = '';
-            materialForm.removeEventListener('submit', update);
-            materialForm.addEventListener('submit', handleSubmit);
-        });
+    function showOkButton(row) {
+        const okButton = row.cells[2].querySelector('.ok');
+        okButton.style.display = 'inline-block';
     }
 
     function updateThickness(row, newThickness) {
@@ -75,6 +60,8 @@ document.addEventListener('DOMContentLoaded', () => {
         materials = materials.map(material => 
             material.name === name ? { name, thickness: newThickness } : material);
         localStorage.setItem('materials', JSON.stringify(materials));
+        const okButton = row.cells[2].querySelector('.ok');
+        okButton.style.display = 'none';
     }
 
     function deleteMaterial(row) {

@@ -65,13 +65,13 @@ table th {
     cursor: pointer;
 }
 
-.actions .edit {
-    background: #ffc107;
+.actions .ok {
+    background: #28a745;
     color: #fff;
 }
 
-.actions .edit:hover {
-    background: #e0a800;
+.actions .ok:hover {
+    background: #218838;
 }
 
 .actions .delete {
@@ -82,4 +82,3 @@ table th {
 .actions .delete:hover {
     background: #c82333;
 }
-
