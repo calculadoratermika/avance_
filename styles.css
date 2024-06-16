@@ -17,11 +17,13 @@ body {
     width: 100%;
     max-width: 800px;
     margin-bottom: 20px;
+    order: 1;
   }
   
   .container table {
     width: 100%;
     max-width: 800px;
+    order: 2;
   }
   
   .container h1 {
