@@ -90,5 +90,5 @@ table th {
 
 input[type="number"] {
     text-align: center;
-    width: 80px; /* Ajusta este valor para cambiar el ancho del input */
+    width: 120px; /* Ajusta este valor para cambiar el ancho del input */
 }
