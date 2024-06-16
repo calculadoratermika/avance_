@@ -1,79 +1,94 @@
-// Código JavaScript para manejar la funcionalidad
-document.addEventListener('DOMContentLoaded', () => {
-    const csvFileInput = document.getElementById('csvFileInput');
-    const materialsTable = document.getElementById('materialsTable');
-    const addMaterialForm = document.getElementById('addMaterialForm');
+document.addEventListener('DOMContentLoaded', function() {
+    const materialContainer = document.getElementById('material-container');
+    const tablaDatos = document.getElementById('dataTable').getElementsByTagName('tbody')[0];
+    const formTabla = document.getElementById('formTabla');
 
-    // Función para cargar datos desde CSV
-    csvFileInput.addEventListener('change', handleFileUpload);
-
-    function handleFileUpload(event) {
-        const file = event.target.files[0];
-        const reader = new FileReader();
-
-        reader.onload = function(e) {
-            const contents = e.target.result;
-            displayCSVContents(contents);
-        };
-
-        reader.readAsText(file);
-    }
-
-    function displayCSVContents(contents) {
-        // Parse CSV
-        const rows = contents.split('\n');
-        const headers = rows[0].split(',');
-
-        // Limpiar tabla
-        materialsTable.innerHTML = '';
-
-        // Agregar encabezados de tabla
-        const headerRow = document.createElement('tr');
-        headers.forEach(headerText => {
-            const th = document.createElement('th');
-            th.textContent = headerText.trim();
-            headerRow.appendChild(th);
-        });
-        materialsTable.appendChild(headerRow);
-
-        // Agregar filas de datos
-        for (let i = 1; i < rows.length; i++) {
-            const rowData = rows[i].split(',');
-            if (rowData.length === headers.length) {
-                const tr = document.createElement('tr');
-                rowData.forEach(cellData => {
-                    const td = document.createElement('td');
-                    td.textContent = cellData.trim();
-                    tr.appendChild(td);
+    // Función para cargar los materiales desde el archivo CSV
+    function cargarMateriales() {
+        fetch('materiales.csv')
+            .then(response => response.text())
+            .then(data => {
+                const rows = data.split('\n');
+                rows.forEach(row => {
+                    const material = row.trim();
+                    if (material !== '') {
+                        const materialItem = document.createElement('div');
+                        materialItem.textContent = material;
+                        materialItem.draggable = true;
+                        materialItem.classList.add('material-item');
+                        materialContainer.appendChild(materialItem);
+                    }
                 });
-                materialsTable.appendChild(tr);
-            }
-        }
+            })
+            .catch(error => console.error('Error al cargar el archivo CSV:', error));
     }
 
-    // Manejar el envío del formulario para agregar nuevo material
-    addMaterialForm.addEventListener('submit', function(event) {
-        event.preventDefault();
+    // Cargar materiales al cargar la página
+    cargarMateriales();
 
-        const materialInput = document.getElementById('materialInput').value;
-        const densityInput = document.getElementById('densityInput').value;
-        const conductivityInput = document.getElementById('conductivityInput').value;
-
-        // Crear nueva fila en la tabla
-        const newRow = materialsTable.insertRow();
+    // Función para agregar fila a la tabla
+    function agregarFila(material, espesor) {
+        const newRow = tablaDatos.insertRow();
         newRow.innerHTML = `
-            <td>${materialInput}</td>
-            <td>${densityInput}</td>
-            <td>${conductivityInput}</td>
+            <td>${material}</td>
+            <td>${espesor}</td>
+            <td><button class="btnEliminar">Eliminar</button></td>
         `;
+    }
 
-        // Limpiar los campos del formulario
-        addMaterialForm.reset();
+    // Evento de submit del formulario
+    formTabla.addEventListener('submit', function(event) {
+        event.preventDefault();
+        const espesor = document.getElementById('espesor').value.trim();
+        const selectedMaterial = document.querySelector('.selected');
+
+        if (selectedMaterial && espesor !== '') {
+            const material = selectedMaterial.textContent;
+            agregarFila(material, espesor);
+            document.getElementById('espesor').value = ''; // Limpiar el campo de espesor
+        } else {
+            alert('Selecciona un material y proporciona un espesor válido.');
+        }
     });
 
-    // Habilitar el reordenamiento de filas mediante drag&drop
-    const sortableTable = new Sortable(materialsTable, {
-        animation: 150, // milisegundos de animación
-        ghostClass: 'sortable-ghost' // clase CSS para el elemento fantasma durante el arrastre
+    // Evento click en el botón de eliminar
+    tablaDatos.addEventListener('click', function(event) {
+        if (event.target.classList.contains('btnEliminar')) {
+            const row = event.target.closest('tr');
+            row.remove();
+        }
+    });
+
+    // Drag and drop
+    materialContainer.addEventListener('dragstart', function(event) {
+        event.dataTransfer.setData('text/plain', event.target.textContent);
+    });
+
+    materialContainer.addEventListener('dragover', function(event) {
+        event.preventDefault();
+    });
+
+    materialContainer.addEventListener('drop', function(event) {
+        event.preventDefault();
+        const material = event.dataTransfer.getData('text/plain');
+        const materialItem = document.createElement('div');
+        materialItem.textContent = material;
+        materialItem.draggable = true;
+        materialItem.classList.add('material-item');
+        materialContainer.appendChild(materialItem);
+    });
+
+    materialContainer.addEventListener('dragend', function(event) {
+        const draggedMaterial = event.dataTransfer.getData('text/plain');
+        const draggedElement = document.querySelector(`.material-item:contains('${draggedMaterial}')`);
+        draggedElement.remove();
+    });
+
+    // Selección de material
+    materialContainer.addEventListener('click', function(event) {
+        const selectedElement = event.target;
+        const materialItems = document.querySelectorAll('.material-item');
+        materialItems.forEach(item => item.classList.remove('selected'));
+        selectedElement.classList.add('selected');
     });
 });

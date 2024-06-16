@@ -1,25 +1,43 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tabla CRUD con CSV y Drag&Drop</title>
+    <title>Tabla CRUD con CSV y Drag & Drop</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>Tabla de Materiales de Construcción</h1>
-        <input type="file" id="csvFileInput" accept=".csv">
-        <table id="materialsTable">
-            <!-- Aquí se insertarán las filas de la tabla -->
-        </table>
-        <form id="addMaterialForm">
-            <input type="text" id="materialInput" placeholder="Nombre del material" required>
-            <input type="number" id="densityInput" placeholder="Densidad en kg/m3" required>
-            <input type="number" id="conductivityInput" placeholder="Conductividad" required>
-            <button type="submit">Agregar Material</button>
+        <h1>Tabla CRUD con Drag & Drop</h1>
+        
+        <div id="material-container" class="material-container">
+            <!-- Aquí se cargarán los materiales desde el archivo CSV como elementos div -->
+        </div>
+        
+        <form id="formTabla">
+            <label for="espesor">Espesor:</label>
+            <input type="text" id="espesor" name="espesor" required>
+            
+            <button type="submit">Agregar</button>
         </form>
+        
+        <div id="tablaDatos">
+            <!-- Aquí se mostrará la tabla de datos -->
+            <table id="dataTable">
+                <thead>
+                    <tr>
+                        <th>Material</th>
+                        <th>Espesor</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Las filas se agregarán dinámicamente con JavaScript -->
+                </tbody>
+            </table>
+        </div>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
