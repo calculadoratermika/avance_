@@ -93,7 +93,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.addEventListener('dragstart', function(event) {
         draggedItem = event.target;
-        event.target.style.opacity = '0.5';
+        draggedItem.classList.add('dragging'); // Add dragging class
+    });
+
+    document.addEventListener('dragend', function(event) {
+        draggedItem.classList.remove('dragging'); // Remove dragging class on drop
     });
 
     document.addEventListener('dragover', function(event) {
@@ -103,7 +107,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('drop', function(event) {
         if (event.target.tagName === 'TD') {
             event.target.parentNode.before(draggedItem);
-            draggedItem.style.opacity = '1';
         }
     });
 });

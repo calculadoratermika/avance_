@@ -92,3 +92,8 @@ input[type="number"] {
     text-align: center;
     width: 120px; /* Ajusta este valor para cambiar el ancho del input */
 }
+
+.dragging {
+    opacity: 0.5;
+    background-color: #f8f8f8; /* Color de fondo resaltado */
+}
