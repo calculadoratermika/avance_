@@ -48,7 +48,8 @@ table {
     border-collapse: collapse;
 }
 
-table th, table td {
+table th,
+table td {
     padding: 10px;
     border: 1px solid #ddd;
     text-align: center;
@@ -90,10 +91,9 @@ table th {
 
 input[type="number"] {
     text-align: center;
-    width: 120px; /* Ajusta este valor para cambiar el ancho del input */
+    width: 80px; /* Ajusta este valor para cambiar el ancho del input */
 }
 
 .dragging {
-    opacity: 0.5;
-    background-color: #f8f8f8; /* Color de fondo resaltado */
+    border: 2px dashed #007bff; /* Añadir un borde punteado azul a la fila arrastrada */
 }
