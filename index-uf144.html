@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLSI E2</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file -->
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Edificio 8 - UF 144</h1>
+        </div>
+        <div id="loader">Loading data...</div> <!-- Loader -->
+        <table id="data-table" aria-live="polite">
+            <thead>
+                <tr></tr> <!-- Table headers will be populated dynamically -->
+            </thead>
+            <tbody>
+                <!-- Table rows will be populated dynamically -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loader = document.getElementById('loader');
+            fetch('data-uf144.csv')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    loader.style.display = 'none'; // Hide loader
+                    const rows = data.trim().split('\n').map(row => row.split(','));
+                    const headers = rows.shift();
+
+                    // Populate table headers
+                    const headerRow = document.querySelector('#data-table thead tr');
+                    headers.forEach(header => {
+                        const th = document.createElement('th');
+                        th.textContent = header.trim();
+                        th.scope = 'col'; // Accessibility improvement
+                        headerRow.appendChild(th);
+                    });
+
+                    // Populate table rows
+                    const tbody = document.querySelector('#data-table tbody');
+                    rows.forEach(row => {
+                        const tr = document.createElement('tr');
+                        row.forEach(cell => {
+                            const td = document.createElement('td');
+                            td.textContent = cell.trim();
+                            tr.appendChild(td);
+                        });
+                        tbody.appendChild(tr);
+                    });
+                })
+                .catch(error => {
+                    loader.textContent = 'Error fetching data: ' + error.message;
+                    console.error('Error fetching data:', error);
+                });
+        });
+    </script>
+</body>
+</html>

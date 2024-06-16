@@ -1,0 +1,96 @@
+/* General Body Styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+}
+
+/* Container Styling */
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+/* Header Styling */
+.header {
+    background-color: #f2f2f2; /* Match this color to the th background */
+    padding: 20px;
+    border-radius: 8px 8px 0 0;
+}
+
+.header h1 {
+    text-align: center;
+    color: #333;
+    margin: 0;
+}
+
+/* Table Styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #f2f2f2;
+    color: #333;
+}
+
+/* Row Hover and Alternating Colors */
+tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+tbody tr:nth-child(odd) {
+    background-color: #fafafa;
+}
+
+/* Smooth Transitions */
+tbody tr {
+    transition: background-color 0.3s ease;
+}
+
+/* Loader Styling */
+#loader {
+    text-align: center;
+    padding: 20px;
+    font-size: 18px;
+    color: #666;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .container {
+        padding: 10px;
+        margin: 20px;  /* Add margin to the container */
+    }
+
+    th, td {
+        padding: 8px;
+    }
+
+    .header {
+        padding: 10px;
+    }
+}
+
+/* Accessibility Improvements */
+a, button, input, textarea {
+    outline: none;
+}
+
+a:focus, button:focus, input:focus, textarea:focus {
+    outline: 2px solid #4d90fe;
+    outline-offset: 2px;
+}
