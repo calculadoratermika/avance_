@@ -111,6 +111,10 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('drop', function(event) {
         if (draggedItem) {
             draggedItem.style.position = 'static';
+            const target = event.target.closest('tr');
+            if (target && target !== draggedItem) {
+                materialTable.insertBefore(draggedItem, target);
+            }
             draggedItem = null;
         }
     });
