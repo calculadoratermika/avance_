@@ -87,3 +87,8 @@ table th {
 .ok-button:hover {
     background: #218838;
 }
+
+input[type="number"] {
+    text-align: center;
+    width: 80px; /* Ajusta este valor para cambiar el ancho del input */
+}
