@@ -12,18 +12,23 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         const name = materialName.value;
         const thickness = materialThickness.value;
-        materials.push({ name, thickness });
-        localStorage.setItem('materials', JSON.stringify(materials));
-        addMaterial(name, thickness);
-        materialName.value = '';
-        materialThickness.value = '';
+        if (name && thickness) {
+            materials.push({ name, thickness });
+            localStorage.setItem('materials', JSON.stringify(materials));
+            addMaterial(name, thickness);
+            materialName.value = '';
+            materialThickness.value = '';
+        }
     });
 
     function addMaterial(name, thickness) {
-        const row = materialTable.insertRow();
-        row.insertCell(0).textContent = name;
+        const row = document.createElement('tr');
+        
+        const nameCell = document.createElement('td');
+        nameCell.textContent = name;
+        row.appendChild(nameCell);
 
-        const thicknessCell = row.insertCell(1);
+        const thicknessCell = document.createElement('td');
         const thicknessInput = document.createElement('input');
         thicknessInput.type = 'number';
         thicknessInput.value = thickness;
@@ -36,12 +41,17 @@ document.addEventListener('DOMContentLoaded', () => {
         okButton.addEventListener('click', () => updateThickness(row, thicknessInput, okButton));
         thicknessCell.appendChild(okButton);
 
-        const actionsCell = row.insertCell(2);
+        row.appendChild(thicknessCell);
+
+        const actionsCell = document.createElement('td');
         const deleteButton = document.createElement('button');
         deleteButton.textContent = 'Eliminar';
         deleteButton.classList.add('delete');
         deleteButton.addEventListener('click', () => deleteMaterial(row));
         actionsCell.appendChild(deleteButton);
+        
+        row.appendChild(actionsCell);
+        materialTable.appendChild(row);
     }
 
     function renderMaterials(materials) {
@@ -75,11 +85,13 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         const name = materialName.value;
         const thickness = materialThickness.value;
-        materials.push({ name, thickness });
-        localStorage.setItem('materials', JSON.stringify(materials));
-        addMaterial(name, thickness);
-        materialName.value = '';
-        materialThickness.value = '';
+        if (name && thickness) {
+            materials.push({ name, thickness });
+            localStorage.setItem('materials', JSON.stringify(materials));
+            addMaterial(name, thickness);
+            materialName.value = '';
+            materialThickness.value = '';
+        }
     }
 
     materialForm.addEventListener('submit', handleSubmit);
