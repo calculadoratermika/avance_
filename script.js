@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function addMaterial(name, thickness) {
         const row = document.createElement('tr');
+        row.draggable = true;
         
         const nameCell = document.createElement('td');
         nameCell.textContent = name;
