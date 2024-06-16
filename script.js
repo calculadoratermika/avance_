@@ -1,79 +1,32 @@
 document.addEventListener('DOMContentLoaded', () => {
     const materialForm = document.getElementById('materialForm');
-    const materialTable = document.getElementById('materialTable').getElementsByTagName('tbody')[0];
-    let draggedItem = null;
+    const materialSelect = document.getElementById('materialSelect');
+    const densityInput = document.getElementById('densityInput');
+    const conductivityInput = document.getElementById('conductivityInput');
+
+    // Leer el archivo CSV y llenar la lista desplegable
+    fetch('materials.csv')
+        .then(response => response.text())
+        .then(data => {
+            const rows = data.split('\n');
+            rows.forEach(row => {
+                const [material, density, conductivity] = row.split(',');
+                const option = document.createElement('option');
+                option.value = material.trim();
+                option.textContent = material.trim();
+                materialSelect.appendChild(option);
+            });
+        });
 
     materialForm.addEventListener('submit', function(e) {
         e.preventDefault();
-        const materialName = document.getElementById('materialName').value;
-        const materialThickness = document.getElementById('materialThickness').value;
-        if (materialName && materialThickness) {
-            const newRow = createMaterialRow(materialName, materialThickness);
-            materialTable.appendChild(newRow);
-            updateMaterialsStorage();
-            materialForm.reset();
-        }
-    });
-
-    function createMaterialRow(name, thickness) {
-        const row = document.createElement('tr');
-        row.draggable = true;
-        row.innerHTML = `
-            <td>${name}</td>
-            <td><input type="number" value="${thickness}" /></td>
-            <td><button class="delete">Delete</button></td>
-        `;
-        return row;
-    }
-
-    function updateMaterialsStorage() {
-        const rows = materialTable.getElementsByTagName('tr');
-        const materials = [];
-        for (let i = 0; i < rows.length; i++) {
-            const name = rows[i].cells[0].textContent;
-            const thickness = rows[i].cells[1].querySelector('input').value;
-            materials.push({ name, thickness });
-        }
-        localStorage.setItem('materials', JSON.stringify(materials));
-    }
-
-    materialTable.addEventListener('dragstart', function(event) {
-        draggedItem = event.target.closest('tr');
-    });
-
-    materialTable.addEventListener('dragover', function(event) {
-        event.preventDefault();
-        const target = event.target.closest('tr');
-        if (draggedItem && target && target !== draggedItem) {
-            if (target.nextSibling === draggedItem) {
-                materialTable.insertBefore(draggedItem, target);
-            } else {
-                materialTable.insertBefore(draggedItem, target.nextSibling);
-            }
-        }
-    });
-
-    materialTable.addEventListener('drop', function(event) {
-        event.preventDefault();
-    });
-
-    materialTable.addEventListener('dragend', function(event) {
-        draggedItem = null;
-        updateMaterialsStorage();
-    });
-
-    materialTable.addEventListener('click', function(event) {
-        if (event.target.classList.contains('delete')) {
-            const row = event.target.closest('tr');
-            row.remove();
-            updateMaterialsStorage();
-        }
-    });
-
-    // Load materials from localStorage on page load
-    const storedMaterials = JSON.parse(localStorage.getItem('materials')) || [];
-    storedMaterials.forEach(material => {
-        const newRow = createMaterialRow(material.name, material.thickness);
-        materialTable.appendChild(newRow);
+        const selectedMaterial = materialSelect.value;
+        const selectedDensity = densityInput.value;
+        const selectedConductivity = conductivityInput.value;
+        // Procesar los datos seleccionados
+        console.log('Material seleccionado:', selectedMaterial);
+        console.log('Densidad seleccionada:', selectedDensity);
+        console.log('Conductividad térmica seleccionada:', selectedConductivity);
+        // Resto de la lógica para guardar o utilizar los datos
     });
 });
