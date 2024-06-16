@@ -32,19 +32,26 @@ document.addEventListener('DOMContentLoaded', function() {
         newRow.innerHTML = `
             <td>${material}</td>
             <td>${espesor}</td>
-            <td><button class="btnEliminar">Eliminar</button></td>
+            <td><button class="btnEliminar" title="Eliminar"><i class="fas fa-trash"></i></button></td>
         `;
+
+        // Agregar eventos de arrastrar y soltar
+        newRow.addEventListener('dragstart', dragStart);
+        newRow.addEventListener('dragover', dragOver);
+        newRow.addEventListener('drop', drop);
+        newRow.addEventListener('dragend', dragEnd);
     }
 
     // Evento de submit del formulario
     formTabla.addEventListener('submit', function(event) {
         event.preventDefault();
         const espesor = document.getElementById('espesor').value.trim();
-        const material = materialSelect.value;
+        const selectedMaterial = materialSelect.value;
 
-        if (material && espesor !== '') {
-            agregarFila(material, espesor);
+        if (selectedMaterial && espesor !== '') {
+            agregarFila(selectedMaterial, espesor);
             document.getElementById('espesor').value = ''; // Limpiar el campo de espesor
+            materialSelect.value = ''; // Reiniciar la selección del material
         } else {
             alert('Selecciona un material y proporciona un espesor válido.');
         }
@@ -52,53 +59,49 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Evento click en el botón de eliminar
     tablaDatos.addEventListener('click', function(event) {
-        if (event.target.classList.contains('btnEliminar')) {
+        if (event.target.closest('.btnEliminar')) {
             const row = event.target.closest('tr');
             row.remove();
         }
     });
 
-    // Drag and drop para filas de la tabla
-    let draggedRow = null;
+    // Funciones de arrastrar y soltar
+    let draggingElement;
 
-    tablaDatos.addEventListener('dragstart', function(event) {
-        draggedRow = event.target.closest('tr');
-        event.dataTransfer.effectAllowed = 'move';
-        event.dataTransfer.setData('text/html', draggedRow.outerHTML);
-        setTimeout(() => {
-            draggedRow.classList.add('dragging');
-        }, 0);
-    });
+    function dragStart(event) {
+        draggingElement = event.target;
+        event.target.classList.add('dragging');
+    }
 
-    tablaDatos.addEventListener('dragover', function(event) {
+    function dragOver(event) {
         event.preventDefault();
-        event.dataTransfer.dropEffect = 'move';
+        const afterElement = getDragAfterElement(tablaDatos, event.clientY);
+        if (afterElement == null) {
+            tablaDatos.appendChild(draggingElement);
+        } else {
+            tablaDatos.insertBefore(draggingElement, afterElement);
+        }
+    }
 
-        const targetRow = event.target.closest('tr');
-        if (targetRow && targetRow !== draggedRow) {
-            const bounding = targetRow.getBoundingClientRect();
-            const offset = bounding.y + (bounding.height / 2);
+    function drop(event) {
+        event.preventDefault();
+    }
 
-            if (event.clientY - offset > 0) {
-                targetRow.after(draggedRow);
+    function dragEnd(event) {
+        event.target.classList.remove('dragging');
+    }
+
+    function getDragAfterElement(container, y) {
+        const draggableElements = [...container.querySelectorAll('tr[draggable="true"]:not(.dragging)')];
+
+        return draggableElements.reduce((closest, child) => {
+            const box = child.getBoundingClientRect();
+            const offset = y - box.top - box.height / 2;
+            if (offset < 0 && offset > closest.offset) {
+                return { offset: offset, element: child };
             } else {
-                targetRow.before(draggedRow);
+                return closest;
             }
-        }
-    });
-
-    tablaDatos.addEventListener('drop', function(event) {
-        event.preventDefault();
-        if (draggedRow) {
-            draggedRow.classList.remove('dragging');
-            draggedRow = null;
-        }
-    });
-
-    tablaDatos.addEventListener('dragend', function(event) {
-        if (draggedRow) {
-            draggedRow.classList.remove('dragging');
-            draggedRow = null;
-        }
-    });
+        }, { offset: Number.NEGATIVE_INFINITY }).element;
+    }
 });

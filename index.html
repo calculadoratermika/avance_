@@ -4,59 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Material Table</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        th, td {
-            border: 1px solid #ccc;
-            padding: 10px;
-            text-align: left;
-        }
-        th {
-            background-color: #f4f4f4;
-        }
-        tr[draggable="true"] {
-            cursor: move;
-        }
-        .material-item {
-            padding: 5px;
-        }
-        .selected {
-            background-color: #d3d3d3;
-        }
-    </style>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div>
+    <div class="container">
         <form id="formTabla">
-            <label for="material-select">Material:</label>
             <select id="material-select" required>
                 <option value="" disabled selected>Seleccionar material</option>
             </select>
-            <label for="espesor">Espesor:</label>
-            <input type="text" id="espesor" required>
-            <button type="submit">Agregar</button>
+            <input type="text" id="espesor" placeholder="Espesor" required>
+            <button type="submit" title="Agregar"><i class="fas fa-plus"></i></button>
         </form>
+        <table id="dataTable">
+            <thead>
+                <tr>
+                    <th>Material</th>
+                    <th>Espesor</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Rows will be added here -->
+            </tbody>
+        </table>
     </div>
-    <table id="dataTable">
-        <thead>
-            <tr>
-                <th>Material</th>
-                <th>Espesor</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Rows will be added here -->
-        </tbody>
-    </table>
     <script src="script.js"></script>
 </body>
 </html>
