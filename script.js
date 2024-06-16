@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Seleccionar elementos del DOM
     const materialForm = document.getElementById('materialForm');
     const materialNameInput = document.getElementById('materialName');
     const materialThicknessInput = document.getElementById('materialThickness');
@@ -51,6 +52,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Función para editar un material existente en la tabla
+    function editMaterial(rowIndex) {
+        const nameCell = materialTableBody.rows[rowIndex].cells[0];
+        const thicknessCell = materialTableBody.rows[rowIndex].cells[1];
+
+        const materialName = prompt('Ingrese el nuevo nombre del material:', nameCell.textContent);
+        const materialThickness = parseFloat(prompt('Ingrese el nuevo espesor del material:', thicknessCell.textContent));
+
+        if (materialName && !isNaN(materialThickness)) {
+            nameCell.textContent = materialName;
+            thicknessCell.textContent = materialThickness.toFixed(2);
+        } else {
+            alert('Por favor, ingrese un nombre de material válido y un espesor numérico.');
+        }
+    }
+
+    // Función para eliminar un material de la tabla
+    function deleteMaterial(rowIndex) {
+        materialTableBody.deleteRow(rowIndex);
+    }
+
     // Función para llenar la tabla de elementos con los elementos del archivo CSV
     function fillTableFromCSV() {
         fetch('materials.csv')
@@ -73,6 +95,20 @@ document.addEventListener('DOMContentLoaded', () => {
     materialForm.addEventListener('submit', event => {
         event.preventDefault();
         addMaterial();
+    });
+
+    // Agregar evento de cambio al campo de nombre de material
+    materialNameInput.addEventListener('input', loadMaterialOptions);
+
+    // Agregar eventos de clic a los botones de edición y eliminación
+    materialTableBody.addEventListener('click', event => {
+        if (event.target.textContent === 'Editar') {
+            const rowIndex = Array.prototype.indexOf.call(event.target.parentElement.parentElement.children, event.target.parentElement);
+            editMaterial(rowIndex);
+        } else if (event.target.textContent === 'Eliminar') {
+            const rowIndex = Array.prototype.indexOf.call(event.target.parentElement.parentElement.children, event.target.parentElement);
+            deleteMaterial(rowIndex);
+        }
     });
 
     // Cargar las opciones de material y llenar la tabla inicialmente
