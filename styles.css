@@ -59,41 +59,11 @@ table th {
     background: #f8f8f8;
 }
 
-.actions button {
-    margin: 0 5px;
-    padding: 5px 10px;
-    border: none;
-    cursor: pointer;
-}
-
-.actions .delete {
-    background: #dc3545;
-    color: #fff;
-}
-
-.actions .delete:hover {
-    background: #c82333;
-}
-
-.ok-button {
-    background: #28a745;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    padding: 2px 5px;
-    display: none;
-    margin-left: 5px;
-}
-
-.ok-button:hover {
-    background: #218838;
-}
-
-input[type="number"] {
-    text-align: center;
-    width: 80px; /* Ajusta este valor para cambiar el ancho del input */
-}
-
-.dragging {
-    border: 2px dashed #007bff; /* Añadir un borde punteado azul a la fila arrastrada */
+/* Estilos para la lista de autocompletar */
+input[list] {
+    padding-right: 25px;
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABkUlEQVQ4T93TMQoCURTF8f8gRiSQfEFxFMVIFfQBQUSErQZhFptdQIFXGYmkB4ZIRJwXQVTiHYaYHw2GlxoaKJQ/SohL2NSOqhKB4oAolLpdEt3jK6CuUmpI8IHOYkBj4BFfkTJP0JQLA/JOQ7kcUewkfEmxggOdSaR/BFrKIAvEAYk7ClkA2XzwrgAAAABJRU5ErkJggg==');
+    background-repeat: no-repeat;
+    background-position: right 10px top 15px;
+    background-size: 16px;
 }

@@ -1,44 +1,30 @@
 document.addEventListener('DOMContentLoaded', () => {
     const materialForm = document.getElementById('materialForm');
-    const materialSelect = document.getElementById('materialSelect');
-    const densityInput = document.getElementById('densityInput');
-    const conductivityInput = document.getElementById('conductivityInput');
+    const materialNameInput = document.getElementById('materialName');
+    const materialList = document.getElementById('materialList');
 
-    let isFirstEdit = true;
-
-    // Función para cargar los valores del archivo CSV en la lista desplegable
+    // Función para cargar las opciones de material desde el archivo CSV
     function loadMaterialOptions() {
         fetch('materials.csv')
             .then(response => response.text())
             .then(data => {
                 const rows = data.split('\n');
                 rows.forEach(row => {
-                    const [material, density, conductivity] = row.split(',');
+                    const [material] = row.split(',');
                     const option = document.createElement('option');
                     option.value = material.trim();
-                    option.textContent = material.trim();
-                    materialSelect.appendChild(option);
+                    materialList.appendChild(option);
                 });
             });
     }
 
-    // Cargar la lista desplegable al editar por primera vez el campo "Nombre del material"
-    materialForm.addEventListener('input', function(e) {
-        if (e.target.id === 'materialName' && isFirstEdit) {
-            loadMaterialOptions();
-            isFirstEdit = false;
-        }
-    });
+    // Cargar las opciones al hacer clic en el campo de nombre de material
+    materialNameInput.addEventListener('input', loadMaterialOptions);
 
+    // Manejar el envío del formulario
     materialForm.addEventListener('submit', function(e) {
         e.preventDefault();
-        const selectedMaterial = materialSelect.value;
-        const selectedDensity = densityInput.value;
-        const selectedConductivity = conductivityInput.value;
-        // Procesar los datos seleccionados
-        console.log('Material seleccionado:', selectedMaterial);
-        console.log('Densidad seleccionada:', selectedDensity);
-        console.log('Conductividad térmica seleccionada:', selectedConductivity);
-        // Resto de la lógica para guardar o utilizar los datos
+        // Procesar los datos ingresados y agregar a la tabla
+        // ... (código para agregar fila a la tabla)
     });
 });
