@@ -6,6 +6,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let materials = JSON.parse(localStorage.getItem('materials')) || [];
     renderMaterials(materials);
 
+    let draggedItem = null;
+    let offsetX = 0;
+    let offsetY = 0;
+
     materialForm.addEventListener('submit', function(e) {
         e.preventDefault();
         const name = materialName.value;
@@ -59,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateThickness(row, thicknessInput, okButton) {
         const name = row.cells[0].textContent;
         const newThickness = thicknessInput.value;
-        materials = materials.map(material => 
+        materials = materials.map(material =>
             material.name === name ? { name, thickness: newThickness } : material);
         localStorage.setItem('materials', JSON.stringify(materials));
         okButton.style.display = 'none';
@@ -68,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function deleteMaterial(row) {
         const name = row.cells[0].textContent;
         const thickness = row.cells[1].querySelector('input').value;
-        materials = materials.filter(material => 
+        materials = materials.filter(material =>
             !(material.name === name && material.thickness == thickness));
         localStorage.setItem('materials', JSON.stringify(materials));
         row.remove();
@@ -89,24 +93,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
     materialForm.addEventListener('submit', handleSubmit);
 
-    let draggedItem = null;
-
     document.addEventListener('dragstart', function(event) {
         draggedItem = event.target;
-        draggedItem.classList.add('dragging'); // Add dragging class
-    });
-
-    document.addEventListener('dragend', function(event) {
-        draggedItem.classList.remove('dragging'); // Remove dragging class on drop
+        offsetX = event.clientX - draggedItem.getBoundingClientRect().left;
+        offsetY = event.clientY - draggedItem.getBoundingClientRect().top;
     });
 
     document.addEventListener('dragover', function(event) {
-        event.preventDefault();
+        if (draggedItem) {
+            event.preventDefault();
+            draggedItem.style.position = 'absolute';
+            draggedItem.style.left = (event.clientX - offsetX) + 'px';
+            draggedItem.style.top = (event.clientY - offsetY) + 'px';
+        }
     });
 
     document.addEventListener('drop', function(event) {
-        if (event.target.tagName === 'TD') {
-            event.target.parentNode.before(draggedItem);
+        if (draggedItem) {
+            draggedItem.style.position = 'static';
+            draggedItem = null;
         }
     });
 });
