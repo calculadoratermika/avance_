@@ -8,6 +8,15 @@
 </head>
 <body>
     <h1>Lista de Materiales de Construcción</h1>
+
+    <form id="materialForm">
+            <label for="materialName">Nombre del Material:</label>
+            <input type="text" id="materialName" name="materialName" required>
+            <label for="materialThickness">Espesor (mm):</label>
+            <input type="number" id="materialThickness" name="materialThickness" step="any" required>
+            <button type="submit">Agregar Material</button>
+        </form>
+    
     <table id="materialTable">
         <thead>
             <tr>
@@ -20,13 +29,7 @@
             <!-- Las filas se crearán dinámicamente aquí -->
         </tbody>
     </table>
-    <form id="materialForm">
-        <label for="materialName">Nombre del Material:</label>
-        <input type="text" id="materialName" name="materialName" required>
-        <label for="materialThickness">Espesor (mm):</label>
-        <input type="number" id="materialThickness" name="materialThickness" step="any" required>
-        <button type="submit">Agregar Material</button>
-    </form>
+
     <script src="script.js"></script>
 </body>
 </html>
