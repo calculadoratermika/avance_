@@ -27,18 +27,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const thicknessInput = document.createElement('input');
         thicknessInput.type = 'number';
         thicknessInput.value = thickness;
-        thicknessInput.addEventListener('input', () => showOkButton(row));
+        thicknessInput.addEventListener('input', () => showOkButton(thicknessInput));
         thicknessCell.appendChild(thicknessInput);
 
-        const actionsCell = row.insertCell(2);
-
         const okButton = document.createElement('button');
-        okButton.textContent = 'OK';
-        okButton.classList.add('ok');
-        okButton.style.display = 'none';
-        okButton.addEventListener('click', () => updateThickness(row, thicknessInput.value));
-        actionsCell.appendChild(okButton);
+        okButton.innerHTML = '&#10003;'; // Check mark symbol
+        okButton.classList.add('ok-button');
+        okButton.addEventListener('click', () => updateThickness(row, thicknessInput, okButton));
+        thicknessCell.appendChild(okButton);
 
+        const actionsCell = row.insertCell(2);
         const deleteButton = document.createElement('button');
         deleteButton.textContent = 'Eliminar';
         deleteButton.classList.add('delete');
@@ -50,17 +48,17 @@ document.addEventListener('DOMContentLoaded', () => {
         materials.forEach(material => addMaterial(material.name, material.thickness));
     }
 
-    function showOkButton(row) {
-        const okButton = row.cells[2].querySelector('.ok');
+    function showOkButton(thicknessInput) {
+        const okButton = thicknessInput.nextSibling;
         okButton.style.display = 'inline-block';
     }
 
-    function updateThickness(row, newThickness) {
+    function updateThickness(row, thicknessInput, okButton) {
         const name = row.cells[0].textContent;
+        const newThickness = thicknessInput.value;
         materials = materials.map(material => 
             material.name === name ? { name, thickness: newThickness } : material);
         localStorage.setItem('materials', JSON.stringify(materials));
-        const okButton = row.cells[2].querySelector('.ok');
         okButton.style.display = 'none';
     }
 
