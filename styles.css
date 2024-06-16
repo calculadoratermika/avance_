@@ -95,3 +95,11 @@ body {
   #materialNames option {
     padding: 5px;
   }
+
+  tr.dragging {
+    opacity: 0.5; /* Reduce opacity of the dragging row */
+}
+
+tr.drag-over {
+    background-color: #f0f0f0; /* Change background color when dragging over a row */
+}
