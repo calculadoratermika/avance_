@@ -57,22 +57,33 @@ button {
     transition: background-color 0.3s, box-shadow 0.3s, transform 0.2s;
 }
 
-.btnAgregar {
-    background-color: #28a745; /* Verde */
+form button {
+    background-color: #28a745;
     color: #fff;
 }
 
-.btnVaciarTabla {
-    background-color: #dc3545; /* Rojo */
-    color: #fff;
-    margin-left: 10px; /* Espacio adicional entre botones */
-}
-
-button:hover {
+form button:hover {
+    background-color: #218838;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-button:active {
+form button:active {
+    transform: scale(0.95);
+}
+
+#btnVaciarTabla {
+    background-color: #dc3545;
+    color: #fff;
+    margin-top: 10px;
+    align-self: flex-end;
+}
+
+#btnVaciarTabla:hover {
+    background-color: #c82333;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+#btnVaciarTabla:active {
     transform: scale(0.95);
 }
 
@@ -124,7 +135,7 @@ tr.dragging:hover {
 }
 
 /* Icon Buttons */
-.btnEliminar, .btnAgregar {
+.btnEliminar {
     background: none;
     border: none;
     color: #dc3545;
@@ -133,11 +144,28 @@ tr.dragging:hover {
     transition: color 0.3s, transform 0.2s;
 }
 
-.btnEliminar:hover, .btnAgregar:hover {
+.btnEliminar:hover {
     color: #c82333;
 }
 
-.btnEliminar:active, .btnAgregar:active {
+.btnEliminar:active {
+    transform: scale(0.95);
+}
+
+.btnAgregar {
+    background: none;
+    border: none;
+    color: #28a745;
+    cursor: pointer;
+    font-size: 1.2em;
+    transition: color 0.3s, transform 0.2s;
+}
+
+.btnAgregar:hover {
+    color: #218838;
+}
+
+.btnAgregar:active {
     transform: scale(0.95);
 }
 
@@ -150,5 +178,9 @@ tr.dragging:hover {
 
     form {
         flex-direction: column;
+    }
+
+    #espesor {
+        width: calc(100% - 60px); /* Adjusted to match the width of "Seleccionar material" */
     }
 }
