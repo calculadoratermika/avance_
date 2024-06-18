@@ -58,7 +58,7 @@ button {
 }
 
 form button {
-    background-color: #28a745;
+    background-color: #28a745; /* Verde */
     color: #fff;
 }
 
@@ -72,7 +72,7 @@ form button:active {
 }
 
 #btnVaciarTabla {
-    background-color: #dc3545;
+    background-color: #dc3545; /* Rojo */
     color: #fff;
     margin-top: 10px;
     align-self: flex-end;
@@ -135,37 +135,31 @@ tr.dragging:hover {
 }
 
 /* Icon Buttons */
-.btnEliminar {
+.btnEliminar, .btnAgregar {
     background: none;
     border: none;
-    color: #dc3545;
-    cursor: pointer;
     font-size: 1.2em;
+    cursor: pointer;
     transition: color 0.3s, transform 0.2s;
+}
+
+.btnEliminar {
+    color: #dc3545; /* Rojo */
+}
+
+.btnAgregar {
+    color: #28a745; /* Verde */
 }
 
 .btnEliminar:hover {
     color: #c82333;
 }
 
-.btnEliminar:active {
-    transform: scale(0.95);
-}
-
-.btnAgregar {
-    background: none;
-    border: none;
-    color: #28a745;
-    cursor: pointer;
-    font-size: 1.2em;
-    transition: color 0.3s, transform 0.2s;
-}
-
 .btnAgregar:hover {
     color: #218838;
 }
 
-.btnAgregar:active {
+.btnEliminar:active, .btnAgregar:active {
     transform: scale(0.95);
 }
 
@@ -181,6 +175,6 @@ tr.dragging:hover {
     }
 
     #espesor {
-        width: calc(100% - 60px); /* Adjusted to match the width of "Seleccionar material" */
+        width: calc(100% - 60px); /* Ajuste para que el campo de espesor sea del mismo ancho que el selector de material */
     }
 }
