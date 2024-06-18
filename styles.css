@@ -103,14 +103,13 @@ table, th, td {
 th {
     background-color: #f8f9fa;
     padding: 12px;
-    text-align: left;
+    text-align: left; /* Alinear texto a la izquierda en la primera columna */
     font-weight: 600;
 }
 
 td {
     padding: 12px;
-    text-align: left;
-    vertical-align: middle;
+    text-align: center; /* Alinear texto al centro en las columnas 2 y 3 */
 }
 
 tr:nth-child(even) {
