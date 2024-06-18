@@ -46,9 +46,9 @@ input[type="text"]:focus, select:focus {
     outline: none;
 }
 
-button {
+button[type="submit"] {
     padding: 8px 12px;
-    background-color: #00ab00;
+    background-color: #28a745; /* Green color */
     color: #fff;
     border: none;
     border-radius: 4px;
@@ -59,12 +59,12 @@ button {
     transition: background-color 0.3s, box-shadow 0.3s, transform 0.2s;
 }
 
-button:hover {
-    background-color: #298641;
+button[type="submit"]:hover {
+    background-color: #218838;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-button:active {
+button[type="submit"]:active {
     transform: scale(0.95);
 }
 
@@ -116,31 +116,58 @@ tr.dragging:hover {
 }
 
 /* Icon Buttons */
-.btnEliminar, .btnAgregar {
+.btnEliminar {
     background: none;
     border: none;
-    color: #a71826;
+    color: #dc3545;
     cursor: pointer;
     font-size: 1.2em;
     transition: color 0.3s, transform 0.2s;
 }
 
-.btnEliminar:hover, .btnAgregar:hover {
-    color: #720b15;
+.btnEliminar:hover {
+    color: #c82333;
 }
 
-.btnEliminar:active, .btnAgregar:active {
+.btnEliminar:active {
+    transform: scale(0.95);
+}
+
+/* Clear Table Button Styles */
+#btnVaciarTabla {
+    display: block;
+    margin: 20px auto 0;
+    padding: 10px 20px;
+    background-color: #dc3545; /* Red color */
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s, box-shadow 0.3s, transform 0.2s;
+}
+
+#btnVaciarTabla:hover {
+    background-color: #c82333;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+#btnVaciarTabla:active {
     transform: scale(0.95);
 }
 
 /* Responsive Design */
 @media (max-width: 600px) {
-    input[type="text"], select, button {
+    input[type="text"], select, button[type="submit"] {
         width: 100%;
         margin-bottom: 10px;
     }
 
     form {
         flex-direction: column;
+    }
+
+    #btnVaciarTabla {
+        width: 100%;
     }
 }
