@@ -2,13 +2,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const materialSelect = document.getElementById('material-select');
     const tablaDatos = document.getElementById('dataTable').getElementsByTagName('tbody')[0];
     const formTabla = document.getElementById('formTabla');
-    const btnVaciarTabla = document.getElementById('btnVaciarTabla');
-
-    // Variable para controlar si ya se han cargado elementos desde localStorage
     let elementosCargados = false;
 
-    // Cargar materiales desde CSV al cargar la página
     cargarMateriales();
+    cargarElementosGuardados();
 
     // Evento de submit del formulario
     formTabla.addEventListener('submit', function(event) {
@@ -37,12 +34,17 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Evento click en el botón para vaciar la tabla
-    btnVaciarTabla.addEventListener('click', function() {
-        if (confirm('¿Seguro que quieres vaciar la tabla?')) {
-            tablaDatos.innerHTML = '';
-            limpiarLocalStorage();
-        }
-    });
+    const btnVaciarTabla = document.getElementById('btnVaciarTabla');
+    if (btnVaciarTabla) {
+        btnVaciarTabla.addEventListener('click', function() {
+            if (confirm('¿Seguro que quieres vaciar la tabla?')) {
+                tablaDatos.innerHTML = '';
+                limpiarLocalStorage();
+            }
+        });
+    } else {
+        console.error('El botón "btnVaciarTabla" no fue encontrado.');
+    }
 
     // Función para cargar materiales desde el archivo CSV
     function cargarMateriales() {
@@ -59,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         materialSelect.appendChild(option);
                     }
                 });
-                cargarElementosGuardados(); // Luego de cargar los materiales, cargar elementos guardados
+                cargarElementosGuardados();
             })
             .catch(error => console.error('Error al cargar el archivo CSV:', error));
     }
@@ -87,7 +89,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         guardarEnLocalStorage(material, espesor);
 
-        // Agregar eventos de arrastrar y soltar
         newRow.addEventListener('dragstart', dragStart);
         newRow.addEventListener('dragover', dragOver);
         newRow.addEventListener('drop', drop);
@@ -144,7 +145,7 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             tablaDatos.insertBefore(draggingElement, afterElement);
         }
-        actualizarLocalStorage(); // Actualizar localStorage después de soltar la fila
+        actualizarLocalStorage();
     }
 
     function dragEnd(event) {
