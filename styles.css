@@ -22,7 +22,7 @@ body {
 /* Form Styles */
 form {
     display: flex;
-    flex-wrap: wrap; /* Para envolver elementos en modo responsivo */
+    flex-wrap: wrap; /* Envolver elementos en modo responsivo */
     gap: 10px;
     margin-bottom: 20px;
 }
@@ -32,13 +32,12 @@ label {
 }
 
 input[type="text"], select {
-    flex: 1; /* Que ocupen todo el espacio disponible */
+    flex: 1; /* Ocupar todo el espacio disponible */
     padding: 8px 12px;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
     transition: border-color 0.3s, box-shadow 0.3s;
-    margin-right: 10px; /* Márgenes a la derecha para separar los elementos */
 }
 
 input[type="text"]:focus, select:focus {
@@ -52,9 +51,7 @@ button {
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: inline-block; /* Botones en línea */
     transition: background-color 0.3s, box-shadow 0.3s, transform 0.2s;
 }
 
@@ -75,7 +72,6 @@ form button:active {
 #btnVaciarTabla {
     background-color: #dc3545; /* Rojo */
     color: #fff;
-    margin-top: 10px;
     align-self: flex-end;
 }
 
@@ -167,12 +163,15 @@ tr.dragging:hover {
 /* Responsive Design */
 @media (max-width: 600px) {
     input[type="text"], select, button {
-        width: calc(100% - 20px); /* Ajuste para el espacio de los márgenes */
-        margin-right: 0; /* Quitar margen derecho para que no haya espacio adicional */
-        margin-bottom: 10px; /* Espacio entre elementos */
+        width: 100%; /* Ocupar todo el ancho disponible */
     }
 
     form {
-        flex-direction: column;
+        flex-direction: column; /* Apilar elementos en modo responsivo */
+    }
+
+    #btnVaciarTabla {
+        width: 100%; /* Botón de ancho completo en modo responsivo */
+        margin-top: 10px;
     }
 }
