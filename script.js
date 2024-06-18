@@ -33,19 +33,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Evento click en el botón para vaciar la tabla
-    const btnVaciarTabla = document.getElementById('btnVaciarTabla');
-    if (btnVaciarTabla) {
-        btnVaciarTabla.addEventListener('click', function() {
-            if (confirm('¿Seguro que quieres vaciar la tabla?')) {
-                tablaDatos.innerHTML = '';
-                limpiarLocalStorage();
-            }
-        });
-    } else {
-        console.error('El botón "btnVaciarTabla" no fue encontrado.');
-    }
-
     // Función para cargar materiales desde el archivo CSV
     function cargarMateriales() {
         fetch('materiales.csv')
@@ -100,11 +87,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const elementos = JSON.parse(localStorage.getItem('tablaElementos')) || [];
         elementos.push({ material, espesor });
         localStorage.setItem('tablaElementos', JSON.stringify(elementos));
-    }
-
-    // Función para limpiar localStorage
-    function limpiarLocalStorage() {
-        localStorage.removeItem('tablaElementos');
     }
 
     // Función para actualizar localStorage después de eliminar una fila
@@ -163,5 +145,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 return closest;
             }
         }, { offset: Number.NEGATIVE_INFINITY }).element;
+    }
+
+    // Evento click en el botón para vaciar la tabla
+    const btnVaciarTabla = document.getElementById('btnVaciarTabla');
+    if (btnVaciarTabla) {
+        btnVaciarTabla.addEventListener('click', function() {
+            if (confirm('¿Seguro que quieres vaciar la tabla?')) {
+                tablaDatos.innerHTML = '';
+                limpiarLocalStorage();
+            }
+        });
+    } else {
+        console.error('El botón "btnVaciarTabla" no fue encontrado.');
     }
 });
