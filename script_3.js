@@ -2,11 +2,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const materialSelect = document.getElementById('material-select');
     const tablaDatos = document.getElementById('dataTable').getElementsByTagName('tbody')[0];
     const formTabla = document.getElementById('formTabla');
-    const btnVaciarTabla = document.getElementById('btnVaciarTabla');
     let elementosCargados = false;
 
     cargarMateriales();
-    cargarElementosGuardados();
 
     // Evento de submit del formulario
     formTabla.addEventListener('submit', function(event) {
@@ -47,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         materialSelect.appendChild(option);
                     }
                 });
-                cargarElementosGuardados();
+                cargarElementosGuardados(); // Ensure this is called once
             })
             .catch(error => console.error('Error al cargar el archivo CSV:', error));
     }
@@ -56,8 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function cargarElementosGuardados() {
         if (!elementosCargados) {
             const elementos = JSON.parse(localStorage.getItem('tablaElementos')) || [];
-            // Limpiar tabla antes de cargar elementos para evitar duplicados
-            tablaDatos.innerHTML = '';
+            limpiarTabla(); // Clear the table first
             elementos.forEach(elemento => {
                 agregarFila(elemento.material, elemento.espesor);
             });
@@ -100,6 +97,13 @@ document.addEventListener('DOMContentLoaded', function() {
             elementos.push({ material, espesor });
         });
         localStorage.setItem('tablaElementos', JSON.stringify(elementos));
+    }
+
+    // Función para limpiar la tabla
+    function limpiarTabla() {
+        while (tablaDatos.firstChild) {
+            tablaDatos.removeChild(tablaDatos.firstChild);
+        }
     }
 
     // Funciones de arrastrar y soltar
@@ -149,10 +153,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Evento click en el botón para vaciar la tabla
+    const btnVaciarTabla = document.getElementById('btnVaciarTabla');
     if (btnVaciarTabla) {
         btnVaciarTabla.addEventListener('click', function() {
             if (confirm('¿Seguro que quieres vaciar la tabla?')) {
-                tablaDatos.innerHTML = '';
+                limpiarTabla();
                 limpiarLocalStorage();
             }
         });
