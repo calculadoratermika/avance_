@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let elementosCargados = false;
 
     cargarMateriales();
-    
+
     // Evento de submit del formulario
     formTabla.addEventListener('submit', function(event) {
         event.preventDefault();
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         materialSelect.appendChild(option);
                     }
                 });
-                cargarElementosGuardados(); // Call this only once, here
+                cargarElementosGuardados(); // Ensure this is called once
             })
             .catch(error => console.error('Error al cargar el archivo CSV:', error));
     }
@@ -54,6 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function cargarElementosGuardados() {
         if (!elementosCargados) {
             const elementos = JSON.parse(localStorage.getItem('tablaElementos')) || [];
+            limpiarTabla(); // Clear the table first
             elementos.forEach(elemento => {
                 agregarFila(elemento.material, elemento.espesor);
             });
@@ -96,6 +97,13 @@ document.addEventListener('DOMContentLoaded', function() {
             elementos.push({ material, espesor });
         });
         localStorage.setItem('tablaElementos', JSON.stringify(elementos));
+    }
+
+    // Función para limpiar la tabla
+    function limpiarTabla() {
+        while (tablaDatos.firstChild) {
+            tablaDatos.removeChild(tablaDatos.firstChild);
+        }
     }
 
     // Funciones de arrastrar y soltar
@@ -149,7 +157,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (btnVaciarTabla) {
         btnVaciarTabla.addEventListener('click', function() {
             if (confirm('¿Seguro que quieres vaciar la tabla?')) {
-                tablaDatos.innerHTML = '';
+                limpiarTabla();
                 limpiarLocalStorage();
             }
         });
