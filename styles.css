@@ -22,17 +22,17 @@ body {
 /* Form Styles */
 form {
     display: flex;
-    align-items: center;
+    flex-wrap: wrap; /* Para envolver elementos en modo responsivo */
     gap: 10px;
     margin-bottom: 20px;
 }
 
 label {
-    display: none; /* Hide labels for cleaner design */
+    display: none; /* Ocultar etiquetas para un diseño más limpio */
 }
 
 input[type="text"], select {
-    flex: 1;
+    flex: 1; /* Que ocupen todo el espacio disponible */
     padding: 8px 12px;
     border: 1px solid #ccc;
     border-radius: 4px;
