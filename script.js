@@ -26,8 +26,6 @@ document.addEventListener('DOMContentLoaded', function() {
     tablaDatos.addEventListener('click', function(event) {
         if (event.target.closest('.btnEliminar')) {
             const row = event.target.closest('tr');
-            const material = row.cells[0].textContent;
-            const espesor = row.cells[1].textContent;
             row.remove();
             actualizarLocalStorage();
         }
@@ -158,5 +156,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     } else {
         console.error('El botón "btnVaciarTabla" no fue encontrado.');
+    }
+
+    // Función para limpiar localStorage
+    function limpiarLocalStorage() {
+        localStorage.removeItem('tablaElementos');
     }
 });
