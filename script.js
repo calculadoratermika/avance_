@@ -56,13 +56,26 @@ document.addEventListener('DOMContentLoaded', function() {
     function cargarElementosGuardados() {
         if (!elementosCargados) {
             const elementos = JSON.parse(localStorage.getItem('tablaElementos')) || [];
-            // Limpiar tabla antes de cargar elementos para evitar duplicados
-            tablaDatos.innerHTML = '';
             elementos.forEach(elemento => {
-                agregarFila(elemento.material, elemento.espesor);
+                // Verificar si el elemento ya existe en la tabla antes de agregarlo
+                if (!existeElementoEnTabla(elemento.material, elemento.espesor)) {
+                    agregarFila(elemento.material, elemento.espesor);
+                }
             });
             elementosCargados = true;
         }
+    }
+
+    // Función para verificar si un elemento ya existe en la tabla
+    function existeElementoEnTabla(material, espesor) {
+        const filas = tablaDatos.querySelectorAll('tr');
+        for (let i = 0; i < filas.length; i++) {
+            const fila = filas[i];
+            if (fila.cells[0].textContent === material && fila.cells[1].textContent === espesor) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // Función para agregar una nueva fila a la tabla
