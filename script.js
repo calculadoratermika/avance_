@@ -105,6 +105,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function drop(event) {
         event.preventDefault();
+        event.stopPropagation();
+
+        const afterElement = getDragAfterElement(tablaDatos, event.clientY);
+        if (afterElement == null) {
+            tablaDatos.appendChild(draggingElement);
+        } else {
+            tablaDatos.insertBefore(draggingElement, afterElement);
+        }
+
+        // Actualizar orden en localStorage
+        actualizarOrdenLocalStorage();
     }
 
     function dragEnd(event) {
@@ -142,5 +153,16 @@ document.addEventListener('DOMContentLoaded', function() {
             elementos.splice(index, 1);
             localStorage.setItem('tablaElementos', JSON.stringify(elementos));
         }
+    }
+
+    function actualizarOrdenLocalStorage() {
+        const filas = tablaDatos.querySelectorAll('tr');
+        const elementos = [];
+        filas.forEach((fila, index) => {
+            const material = fila.cells[0].textContent;
+            const espesor = fila.cells[1].textContent;
+            elementos.push({ material, espesor });
+        });
+        localStorage.setItem('tablaElementos', JSON.stringify(elementos));
     }
 });
