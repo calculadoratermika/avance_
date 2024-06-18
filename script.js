@@ -4,11 +4,47 @@ document.addEventListener('DOMContentLoaded', function() {
     const formTabla = document.getElementById('formTabla');
     const btnVaciarTabla = document.getElementById('btnVaciarTabla');
 
+    // Variable para controlar si ya se han cargado elementos desde localStorage
     let elementosCargados = false;
 
+    // Cargar materiales desde CSV al cargar la página
     cargarMateriales();
-    cargarElementosGuardados();
 
+    // Evento de submit del formulario
+    formTabla.addEventListener('submit', function(event) {
+        event.preventDefault();
+        const espesor = document.getElementById('espesor').value.trim();
+        const selectedMaterial = materialSelect.value;
+
+        if (selectedMaterial && espesor !== '') {
+            agregarFila(selectedMaterial, espesor);
+            document.getElementById('espesor').value = '';
+            materialSelect.value = '';
+        } else {
+            alert('Selecciona un material y proporciona un espesor válido.');
+        }
+    });
+
+    // Evento click en el botón de eliminar
+    tablaDatos.addEventListener('click', function(event) {
+        if (event.target.closest('.btnEliminar')) {
+            const row = event.target.closest('tr');
+            const material = row.cells[0].textContent;
+            const espesor = row.cells[1].textContent;
+            row.remove();
+            actualizarLocalStorage();
+        }
+    });
+
+    // Evento click en el botón para vaciar la tabla
+    btnVaciarTabla.addEventListener('click', function() {
+        if (confirm('¿Seguro que quieres vaciar la tabla?')) {
+            tablaDatos.innerHTML = '';
+            limpiarLocalStorage();
+        }
+    });
+
+    // Función para cargar materiales desde el archivo CSV
     function cargarMateriales() {
         fetch('materiales.csv')
             .then(response => response.text())
@@ -23,10 +59,12 @@ document.addEventListener('DOMContentLoaded', function() {
                         materialSelect.appendChild(option);
                     }
                 });
+                cargarElementosGuardados(); // Luego de cargar los materiales, cargar elementos guardados
             })
             .catch(error => console.error('Error al cargar el archivo CSV:', error));
     }
 
+    // Función para cargar elementos guardados en localStorage
     function cargarElementosGuardados() {
         if (!elementosCargados) {
             const elementos = JSON.parse(localStorage.getItem('tablaElementos')) || [];
@@ -37,6 +75,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // Función para agregar una nueva fila a la tabla
     function agregarFila(material, espesor) {
         const newRow = tablaDatos.insertRow();
         newRow.setAttribute('draggable', true);
@@ -48,44 +87,38 @@ document.addEventListener('DOMContentLoaded', function() {
 
         guardarEnLocalStorage(material, espesor);
 
+        // Agregar eventos de arrastrar y soltar
         newRow.addEventListener('dragstart', dragStart);
         newRow.addEventListener('dragover', dragOver);
         newRow.addEventListener('drop', drop);
         newRow.addEventListener('dragend', dragEnd);
     }
 
-    formTabla.addEventListener('submit', function(event) {
-        event.preventDefault();
-        const espesor = document.getElementById('espesor').value.trim();
-        const selectedMaterial = materialSelect.value;
+    // Función para guardar elementos en localStorage
+    function guardarEnLocalStorage(material, espesor) {
+        const elementos = JSON.parse(localStorage.getItem('tablaElementos')) || [];
+        elementos.push({ material, espesor });
+        localStorage.setItem('tablaElementos', JSON.stringify(elementos));
+    }
 
-        if (selectedMaterial && espesor !== '') {
-            limpiarLocalStorage();
-            agregarFila(selectedMaterial, espesor);
-            document.getElementById('espesor').value = '';
-            materialSelect.value = '';
-        } else {
-            alert('Selecciona un material y proporciona un espesor válido.');
-        }
-    });
+    // Función para limpiar localStorage
+    function limpiarLocalStorage() {
+        localStorage.removeItem('tablaElementos');
+    }
 
-    tablaDatos.addEventListener('click', function(event) {
-        if (event.target.closest('.btnEliminar')) {
-            const row = event.target.closest('tr');
-            const material = row.cells[0].textContent;
-            const espesor = row.cells[1].textContent;
-            row.remove();
-            actualizarLocalStorage(material, espesor);
-        }
-    });
+    // Función para actualizar localStorage después de eliminar una fila
+    function actualizarLocalStorage() {
+        const filas = tablaDatos.querySelectorAll('tr');
+        const elementos = [];
+        filas.forEach(fila => {
+            const material = fila.cells[0].textContent;
+            const espesor = fila.cells[1].textContent;
+            elementos.push({ material, espesor });
+        });
+        localStorage.setItem('tablaElementos', JSON.stringify(elementos));
+    }
 
-    btnVaciarTabla.addEventListener('click', function() {
-        if (confirm('¿Seguro que quieres vaciar la tabla?')) {
-            tablaDatos.innerHTML = '';
-            localStorage.removeItem('tablaElementos');
-        }
-    });
-
+    // Funciones de arrastrar y soltar
     let draggingElement;
 
     function dragStart(event) {
@@ -105,17 +138,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function drop(event) {
         event.preventDefault();
-        event.stopPropagation();
-
         const afterElement = getDragAfterElement(tablaDatos, event.clientY);
         if (afterElement == null) {
             tablaDatos.appendChild(draggingElement);
         } else {
             tablaDatos.insertBefore(draggingElement, afterElement);
         }
-
-        // Actualizar orden en localStorage
-        actualizarOrdenLocalStorage();
+        actualizarLocalStorage(); // Actualizar localStorage después de soltar la fila
     }
 
     function dragEnd(event) {
@@ -124,7 +153,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function getDragAfterElement(container, y) {
         const draggableElements = [...container.querySelectorAll('tr[draggable="true"]:not(.dragging)')];
-
         return draggableElements.reduce((closest, child) => {
             const box = child.getBoundingClientRect();
             const offset = y - box.top - box.height / 2;
@@ -134,35 +162,5 @@ document.addEventListener('DOMContentLoaded', function() {
                 return closest;
             }
         }, { offset: Number.NEGATIVE_INFINITY }).element;
-    }
-
-    function guardarEnLocalStorage(material, espesor) {
-        const elementos = JSON.parse(localStorage.getItem('tablaElementos')) || [];
-        elementos.push({ material, espesor });
-        localStorage.setItem('tablaElementos', JSON.stringify(elementos));
-    }
-
-    function limpiarLocalStorage() {
-        localStorage.removeItem('tablaElementos');
-    }
-
-    function actualizarLocalStorage(material, espesor) {
-        const elementos = JSON.parse(localStorage.getItem('tablaElementos')) || [];
-        const index = elementos.findIndex(e => e.material === material && e.espesor === espesor);
-        if (index !== -1) {
-            elementos.splice(index, 1);
-            localStorage.setItem('tablaElementos', JSON.stringify(elementos));
-        }
-    }
-
-    function actualizarOrdenLocalStorage() {
-        const filas = tablaDatos.querySelectorAll('tr');
-        const elementos = [];
-        filas.forEach((fila, index) => {
-            const material = fila.cells[0].textContent;
-            const espesor = fila.cells[1].textContent;
-            elementos.push({ material, espesor });
-        });
-        localStorage.setItem('tablaElementos', JSON.stringify(elementos));
     }
 });
