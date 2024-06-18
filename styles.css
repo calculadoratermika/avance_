@@ -38,6 +38,7 @@ input[type="text"], select {
     border-radius: 4px;
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
     transition: border-color 0.3s, box-shadow 0.3s;
+    box-sizing: border-box; /* Ensure padding and border are included in the element's total width */
 }
 
 input[type="text"]:focus, select:focus {
@@ -158,16 +159,18 @@ tr.dragging:hover {
 
 /* Responsive Design */
 @media (max-width: 600px) {
+    form {
+        flex-direction: column;
+        align-items: stretch; /* Align items to stretch to fill the form width */
+    }
+
     input[type="text"], select, button[type="submit"] {
         width: 100%;
         margin-bottom: 10px;
     }
 
-    form {
-        flex-direction: column;
-    }
-
     #btnVaciarTabla {
         width: 100%;
+        margin-top: 20px;
     }
 }
