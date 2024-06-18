@@ -38,7 +38,6 @@ input[type="text"], select {
     border-radius: 4px;
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
     transition: border-color 0.3s, box-shadow 0.3s;
-    box-sizing: border-box; /* Ensure padding and border are included in the element's total width */
 }
 
 input[type="text"]:focus, select:focus {
@@ -47,10 +46,8 @@ input[type="text"]:focus, select:focus {
     outline: none;
 }
 
-button[type="submit"] {
+button {
     padding: 8px 12px;
-    background-color: #28a745; /* Green color */
-    color: #fff;
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -60,12 +57,33 @@ button[type="submit"] {
     transition: background-color 0.3s, box-shadow 0.3s, transform 0.2s;
 }
 
-button[type="submit"]:hover {
+form button {
+    background-color: #28a745;
+    color: #fff;
+}
+
+form button:hover {
     background-color: #218838;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-button[type="submit"]:active {
+form button:active {
+    transform: scale(0.95);
+}
+
+#btnVaciarTabla {
+    background-color: #dc3545;
+    color: #fff;
+    margin-top: 10px;
+    align-self: flex-end;
+}
+
+#btnVaciarTabla:hover {
+    background-color: #c82333;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+#btnVaciarTabla:active {
     transform: scale(0.95);
 }
 
@@ -134,43 +152,35 @@ tr.dragging:hover {
     transform: scale(0.95);
 }
 
-/* Clear Table Button Styles */
-#btnVaciarTabla {
-    display: block;
-    margin: 20px auto 0;
-    padding: 10px 20px;
-    background-color: #dc3545; /* Red color */
-    color: #fff;
+.btnAgregar {
+    background: none;
     border: none;
-    border-radius: 4px;
+    color: #28a745;
     cursor: pointer;
-    text-align: center;
-    transition: background-color 0.3s, box-shadow 0.3s, transform 0.2s;
+    font-size: 1.2em;
+    transition: color 0.3s, transform 0.2s;
 }
 
-#btnVaciarTabla:hover {
-    background-color: #c82333;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+.btnAgregar:hover {
+    color: #218838;
 }
 
-#btnVaciarTabla:active {
+.btnAgregar:active {
     transform: scale(0.95);
 }
 
 /* Responsive Design */
 @media (max-width: 600px) {
-    form {
-        flex-direction: column;
-        align-items: stretch; /* Align items to stretch to fill the form width */
-    }
-
-    input[type="text"], select, button[type="submit"] {
+    input[type="text"], select, button {
         width: 100%;
         margin-bottom: 10px;
     }
 
-    #btnVaciarTabla {
-        width: 100%;
-        margin-top: 20px;
+    form {
+        flex-direction: column;
+    }
+
+    #espesor {
+        width: calc(100% - 60px); /* Adjusted to match the width of "Seleccionar material" */
     }
 }
