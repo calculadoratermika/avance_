@@ -5,7 +5,8 @@ document.addEventListener('DOMContentLoaded', function() {
     let elementosCargados = false;
 
     cargarMateriales();
-    
+    cargarElementosGuardados();
+
     // Evento de submit del formulario
     formTabla.addEventListener('submit', function(event) {
         event.preventDefault();
@@ -45,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         materialSelect.appendChild(option);
                     }
                 });
-                cargarElementosGuardados(); // Call this only once, here
+                cargarElementosGuardados();
             })
             .catch(error => console.error('Error al cargar el archivo CSV:', error));
     }
