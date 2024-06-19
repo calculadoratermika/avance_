@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     function addDragAndDropHandlers(row) {
-        let draggingElement, touchIdentifier;
+        let draggingElement;
 
         function handleDragStart(event) {
             draggingElement = row;
@@ -87,23 +87,18 @@ document.addEventListener('DOMContentLoaded', function () {
         row.addEventListener('touchend', handleTouchEnd);
 
         function handleTouchStart(event) {
-            touchIdentifier = event.targetTouches[0].identifier;
-            handleDragStart(event.targetTouches[0]);
+            event.preventDefault();
+            handleDragStart(event.touches[0]);
         }
 
         function handleTouchMove(event) {
-            const touch = [...event.changedTouches].find(t => t.identifier === touchIdentifier);
-            if (touch) {
-                handleDragOver(touch);
-            }
+            event.preventDefault();
+            handleDragOver(event.touches[0]);
         }
 
         function handleTouchEnd(event) {
-            const touch = [...event.changedTouches].find(t => t.identifier === touchIdentifier);
-            if (touch) {
-                handleDragEnd();
-                touchIdentifier = null;
-            }
+            event.preventDefault();
+            handleDragEnd();
         }
     }
 
