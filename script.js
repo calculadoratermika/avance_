@@ -1,155 +1,110 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const materialSelect = document.getElementById('material-select');
-    const tablaDatos = document.getElementById('dataTable').getElementsByTagName('tbody')[0];
+    const espesorInput = document.getElementById('espesor');
     const formTabla = document.getElementById('formTabla');
+    const dataTable = document.getElementById('dataTable').getElementsByTagName('tbody')[0];
     const btnVaciarTabla = document.getElementById('btnVaciarTabla');
-    let elementosCargados = false;
 
-    cargarMateriales();
-    cargarElementosGuardados();
-
-    // Evento de submit del formulario
-    formTabla.addEventListener('submit', function(event) {
-        event.preventDefault();
-        const espesor = document.getElementById('espesor').value.trim();
-        const selectedMaterial = materialSelect.value;
-
-        if (selectedMaterial && espesor !== '') {
-            agregarFila(selectedMaterial, espesor);
-            document.getElementById('espesor').value = '';
-            materialSelect.value = '';
-        } else {
-            alert('Selecciona un material y proporciona un espesor válido.');
-        }
-    });
-
-    // Evento click en el botón de eliminar
-    tablaDatos.addEventListener('click', function(event) {
-        if (event.target.closest('.btnEliminar')) {
-            const row = event.target.closest('tr');
-            row.remove();
-            actualizarLocalStorage();
-        }
-    });
-
-    // Función para cargar materiales desde el archivo CSV
-    function cargarMateriales() {
-        fetch('materiales.csv')
-            .then(response => response.text())
-            .then(data => {
-                const rows = data.split('\n');
-                rows.forEach(row => {
-                    const material = row.trim();
-                    if (material !== '') {
-                        const option = document.createElement('option');
-                        option.value = material;
-                        option.textContent = material;
-                        materialSelect.appendChild(option);
-                    }
-                });
-                cargarElementosGuardados();
-            })
-            .catch(error => console.error('Error al cargar el archivo CSV:', error));
-    }
-
-    // Función para cargar elementos guardados en localStorage
-    function cargarElementosGuardados() {
-        if (!elementosCargados) {
-            const elementos = JSON.parse(localStorage.getItem('tablaElementos')) || [];
-            elementos.forEach(elemento => {
-                // Verificar si el elemento ya existe en la tabla antes de agregarlo
-                if (!existeElementoEnTabla(elemento.material, elemento.espesor)) {
-                    agregarFila(elemento.material, elemento.espesor);
-                }
+    // Load materials from CSV file
+    fetch('materiales.csv')
+        .then(response => response.text())
+        .then(data => {
+            const rows = data.split('\n');
+            rows.forEach(row => {
+                const option = document.createElement('option');
+                option.value = row;
+                option.text = row;
+                materialSelect.add(option);
             });
-            elementosCargados = true;
-        }
-    }
+        });
 
-    // Función para verificar si un elemento ya existe en la tabla
-    function existeElementoEnTabla(material, espesor) {
-        const filas = tablaDatos.querySelectorAll('tr');
-        for (let i = 0; i < filas.length; i++) {
-            const fila = filas[i];
-            if (fila.cells[0].textContent === material && fila.cells[1].textContent === espesor) {
-                return true;
+    formTabla.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const material = materialSelect.value;
+        const espesor = espesorInput.value;
+
+        if (material && espesor) {
+            const row = dataTable.insertRow();
+            row.setAttribute('draggable', true);
+
+            const cellMaterial = row.insertCell(0);
+            const cellEspesor = row.insertCell(1);
+            const cellAcciones = row.insertCell(2);
+
+            cellMaterial.textContent = material;
+            cellEspesor.textContent = espesor;
+            cellAcciones.innerHTML = '<button class="btnEliminar" title="Eliminar"><i class="fas fa-trash-alt"></i></button>';
+
+            espesorInput.value = '';
+
+            // Add event listeners for drag & drop
+            addDragAndDropHandlers(row);
+        }
+    });
+
+    dataTable.addEventListener('click', function (event) {
+        if (event.target.classList.contains('btnEliminar') || event.target.closest('.btnEliminar')) {
+            const row = event.target.closest('tr');
+            dataTable.removeChild(row);
+        }
+    });
+
+    btnVaciarTabla.addEventListener('click', function () {
+        dataTable.innerHTML = '';
+    });
+
+    function addDragAndDropHandlers(row) {
+        let draggingElement;
+
+        function handleDragStart(event) {
+            draggingElement = row;
+            row.classList.add('dragging');
+        }
+
+        function handleDragEnd() {
+            draggingElement.classList.remove('dragging');
+            draggingElement = null;
+        }
+
+        function handleDragOver(event) {
+            event.preventDefault();
+            const afterElement = getDragAfterElement(dataTable, event.clientY);
+            if (afterElement == null) {
+                dataTable.appendChild(draggingElement);
+            } else {
+                dataTable.insertBefore(draggingElement, afterElement);
             }
         }
-        return false;
-    }
 
-    // Función para agregar una nueva fila a la tabla
-    function agregarFila(material, espesor) {
-        const newRow = tablaDatos.insertRow();
-        newRow.setAttribute('draggable', true);
-        newRow.innerHTML = `
-            <td>${material}</td>
-            <td>${espesor}</td>
-            <td><button class="btnEliminar" title="Eliminar"><i class="fas fa-trash"></i></button></td>
-        `;
+        row.addEventListener('dragstart', handleDragStart);
+        row.addEventListener('dragend', handleDragEnd);
+        dataTable.addEventListener('dragover', handleDragOver);
 
-        guardarEnLocalStorage(material, espesor);
+        // Touch event handlers for mobile devices
+        row.addEventListener('touchstart', handleTouchStart);
+        row.addEventListener('touchmove', handleTouchMove);
+        row.addEventListener('touchend', handleTouchEnd);
 
-        newRow.addEventListener('dragstart', dragStart);
-        newRow.addEventListener('dragover', dragOver);
-        newRow.addEventListener('drop', drop);
-        newRow.addEventListener('dragend', dragEnd);
-    }
-
-    // Función para guardar elementos en localStorage
-    function guardarEnLocalStorage(material, espesor) {
-        const elementos = JSON.parse(localStorage.getItem('tablaElementos')) || [];
-        elementos.push({ material, espesor });
-        localStorage.setItem('tablaElementos', JSON.stringify(elementos));
-    }
-
-    // Función para actualizar localStorage después de eliminar una fila
-    function actualizarLocalStorage() {
-        const filas = tablaDatos.querySelectorAll('tr');
-        const elementos = [];
-        filas.forEach(fila => {
-            const material = fila.cells[0].textContent;
-            const espesor = fila.cells[1].textContent;
-            elementos.push({ material, espesor });
-        });
-        localStorage.setItem('tablaElementos', JSON.stringify(elementos));
-    }
-
-    // Funciones de arrastrar y soltar
-    let draggingElement;
-
-    function dragStart(event) {
-        draggingElement = event.target;
-        event.target.classList.add('dragging');
-    }
-
-    function dragOver(event) {
-        event.preventDefault();
-        const afterElement = getDragAfterElement(tablaDatos, event.clientY);
-        if (afterElement == null) {
-            tablaDatos.appendChild(draggingElement);
-        } else {
-            tablaDatos.insertBefore(draggingElement, afterElement);
+        function handleTouchStart(event) {
+            event.preventDefault();
+            handleDragStart(event.touches[0]);
         }
-    }
 
-    function drop(event) {
-        event.preventDefault();
-        const afterElement = getDragAfterElement(tablaDatos, event.clientY);
-        if (afterElement == null) {
-            tablaDatos.appendChild(draggingElement);
-        } else {
-            tablaDatos.insertBefore(draggingElement, afterElement);
+        function handleTouchMove(event) {
+            event.preventDefault();
+            handleDragOver(event.touches[0]);
         }
-        actualizarLocalStorage();
-    }
 
-    function dragEnd(event) {
-        event.target.classList.remove('dragging');
+        function handleTouchEnd(event) {
+            event.preventDefault();
+            handleDragEnd();
+        }
     }
 
     function getDragAfterElement(container, y) {
-        const draggableElements = [...container.querySelectorAll('tr[draggable="true"]:not(.dragging)')];
+        const draggableElements = [...container.querySelectorAll('tr[draggable]:not(.dragging)')];
+
         return draggableElements.reduce((closest, child) => {
             const box = child.getBoundingClientRect();
             const offset = y - box.top - box.height / 2;
@@ -159,22 +114,5 @@ document.addEventListener('DOMContentLoaded', function() {
                 return closest;
             }
         }, { offset: Number.NEGATIVE_INFINITY }).element;
-    }
-
-    // Evento click en el botón para vaciar la tabla
-    if (btnVaciarTabla) {
-        btnVaciarTabla.addEventListener('click', function() {
-            if (confirm('¿Seguro que quieres vaciar la tabla?')) {
-                tablaDatos.innerHTML = '';
-                limpiarLocalStorage();
-            }
-        });
-    } else {
-        console.error('El botón "btnVaciarTabla" no fue encontrado.');
-    }
-
-    // Función para limpiar localStorage
-    function limpiarLocalStorage() {
-        localStorage.removeItem('tablaElementos');
     }
 });
