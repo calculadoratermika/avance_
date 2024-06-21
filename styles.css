@@ -5,9 +5,21 @@ body {
     margin: 0;
     padding: 0;
     display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
+    flex-direction: column;
     min-height: 100vh;
+}
+
+/* Header Styles */
+header {
+    background-color: #007bff;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2em;
 }
 
 /* Sidebar Styles */
@@ -16,7 +28,7 @@ body {
     background-color: #d3d3d3; /* Light gray */
     padding: 20px 0;
     position: fixed;
-    height: 100%;
+    height: calc(100% - 60px); /* Adjust for header and footer */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -61,6 +73,7 @@ body {
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin-top: 20px;
+    flex-grow: 1;
 }
 
 /* Form Styles */
@@ -147,4 +160,97 @@ table, th, td {
 th {
     background-color: #f8f9fa;
     padding: 12px;
-    text-align: left; /* Align text to the left in the first col
+    text-align: left; /* Align text to the left in the first column */
+    font-weight: 600;
+}
+
+td {
+    padding: 12px;
+    text-align: center; /* Center text in columns 2 and 3 */
+}
+
+tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+tr[draggable="true"] {
+    cursor: move;
+}
+
+tr.dragging {
+    opacity: 0.5;
+    background-color: #e9ecef;
+}
+
+tr.dragging td {
+    background-color: #e9ecef;
+}
+
+tr.dragging:hover {
+    background-color: #dee2e6;
+}
+
+/* Icon Buttons */
+.btnEliminar, .btnAgregar {
+    background: none;
+    border: none;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: color 0.3s, transform 0.2s;
+}
+
+.btnEliminar {
+    color: #dc3545; /* Red */
+}
+
+.btnAgregar {
+    color: #28a745; /* Green */
+}
+
+.btnEliminar:hover {
+    color: #c82333;
+}
+
+.btnAgregar:hover {
+    color: #218838;
+}
+
+.btnEliminar:active, .btnAgregar:active {
+    transform: scale(0.95);
+}
+
+/* Footer Styles */
+footer {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+footer a {
+    color: #fff;
+    font-size: 1.5em;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+footer a:hover {
+    color: #d3d3d3; /* Light gray */
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    input[type="text"], select, button {
+        width: calc(100% - 20px); /* Adjust width to compensate for padding and margin */
+        margin-bottom: 10px;
+    }
+
+    form {
+        flex-direction: column; /* Stack elements in responsive mode */
+    }
+
+    #espesor {
+        width: calc(100% - 100px); /* Adjust the width of the thickness
