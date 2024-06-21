@@ -3,73 +3,36 @@ body {
     font-family: 'Arial', sans-serif;
     background-color: #f0f2f5;
     margin: 0;
-    padding: 0;
+    padding: 20px;
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: flex-start;
     min-height: 100vh;
 }
 
-/* Sidebar Styles */
-.sidebar {
-    width: 200px;
-    background-color: #343a40;
-    padding: 20px;
-    position: fixed;
-    height: 100%;
-}
-
-.sidebar ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-
-.sidebar ul li {
-    margin: 20px 0;
-}
-
-.sidebar ul li a {
-    color: #fff;
-    text-decoration: none;
-    font-size: 1.1em;
-    display: block;
-    padding: 10px;
-    border-radius: 4px;
-    transition: background-color 0.3s;
-}
-
-.sidebar ul li a:hover,
-.sidebar ul li a.active {
-    background-color: #007bff;
-}
-
-/* Container Styles */
 .container {
-    margin-left: 220px; /* Space for the sidebar */
     max-width: 800px;
     width: 100%;
     background-color: #fff;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-top: 20px;
 }
 
 /* Form Styles */
 form {
     display: flex;
-    flex-wrap: wrap; /* To make elements fit properly */
+    flex-wrap: wrap; /* Para que los elementos se ajusten correctamente */
     gap: 10px;
     margin-bottom: 20px;
 }
 
 label {
-    display: none; /* Hide labels for a cleaner design */
+    display: none; /* Ocultar etiquetas para un diseño más limpio */
 }
 
 input[type="text"], select, button {
-    flex: 1; /* To make elements expand properly */
+    flex: 1; /* Para que los elementos se expandan correctamente */
     padding: 8px 12px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -95,7 +58,7 @@ button {
 }
 
 form button {
-    background-color: #28a745; /* Green */
+    background-color: #28a745; /* Verde */
     color: #fff;
 }
 
@@ -109,7 +72,7 @@ form button:active {
 }
 
 #btnVaciarTabla {
-    background-color: #dc3545; /* Red */
+    background-color: #dc3545; /* Rojo */
     color: #fff;
     margin-top: 10px;
     align-self: flex-end;
@@ -140,13 +103,13 @@ table, th, td {
 th {
     background-color: #f8f9fa;
     padding: 12px;
-    text-align: left; /* Align text to the left in the first column */
+    text-align: left; /* Alinear texto a la izquierda en la primera columna */
     font-weight: 600;
 }
 
 td {
     padding: 12px;
-    text-align: center; /* Center text in columns 2 and 3 */
+    text-align: center; /* Alinear texto al centro en las columnas 2 y 3 */
 }
 
 tr:nth-child(even) {
@@ -180,11 +143,11 @@ tr.dragging:hover {
 }
 
 .btnEliminar {
-    color: #dc3545; /* Red */
+    color: #dc3545; /* Rojo */
 }
 
 .btnAgregar {
-    color: #28a745; /* Green */
+    color: #28a745; /* Verde */
 }
 
 .btnEliminar:hover {
@@ -202,19 +165,19 @@ tr.dragging:hover {
 /* Responsive Design */
 @media (max-width: 600px) {
     input[type="text"], select, button {
-        width: calc(100% - 20px); /* Adjust width to compensate for padding and margin */
+        width: calc(100% - 20px); /* Ajuste del ancho para compensar el padding y el margen */
         margin-bottom: 10px;
     }
 
     form {
-        flex-direction: column; /* Stack elements in responsive mode */
+        flex-direction: column; /* Apilar elementos en modo responsivo */
     }
 
     #espesor {
-        width: calc(100% - 100px); /* Adjust the width of the thickness field */
+        width: calc(100% - 100px); /* Ajuste del ancho del campo de espesor */
     }
 
     #btnAgregar {
-        width: 100%; /* Full-width button in responsive mode */
+        width: 100%; /* Botón de ancho completo en modo responsivo */
     }
 }
