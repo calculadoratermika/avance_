@@ -12,50 +12,43 @@ body {
 
 /* Sidebar Styles */
 .sidebar {
-    width: 60px;
-    background-color: #d3d3d3; /* Light gray */
-    padding: 20px 0;
+    width: 200px;
+    background-color: #343a40;
+    padding: 20px;
     position: fixed;
     height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 }
 
 .sidebar ul {
     list-style-type: none;
     padding: 0;
     margin: 0;
-    width: 100%;
 }
 
 .sidebar ul li {
     margin: 20px 0;
-    width: 100%;
-    text-align: center;
 }
 
 .sidebar ul li a {
-    color: #333; /* Dark gray for text */
+    color: #fff;
     text-decoration: none;
-    font-size: 1.5em;
+    font-size: 1.1em;
     display: block;
     padding: 10px;
-    transition: background-color 0.3s, color 0.3s;
+    border-radius: 4px;
+    transition: background-color 0.3s;
 }
 
 .sidebar ul li a:hover,
 .sidebar ul li a.active {
-    background-color: #007bff; /* Blue */
-    color: #fff; /* White */
-    border-radius: 4px;
+    background-color: #007bff;
 }
 
 /* Container Styles */
 .container {
-    margin-left: 80px; /* Increased margin for sidebar */
+    margin-left: 220px; /* Space for the sidebar */
     max-width: 800px;
-    width: calc(100% - 80px); /* Adjust width to accommodate sidebar */
+    width: 100%;
     background-color: #fff;
     padding: 20px;
     border-radius: 10px;
