@@ -1,58 +1,80 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('formTabla');
     const materialSelect = document.getElementById('material-select');
     const espesorInput = document.getElementById('espesor');
-    const formTabla = document.getElementById('formTabla');
     const dataTable = document.getElementById('dataTable').getElementsByTagName('tbody')[0];
     const btnVaciarTabla = document.getElementById('btnVaciarTabla');
 
-    // Load materials from CSV file
-    fetch('materiales.csv')
-        .then(response => response.text())
-        .then(data => {
-            const rows = data.split('\n');
-            rows.forEach(row => {
-                const option = document.createElement('option');
-                option.value = row;
-                option.text = row;
-                materialSelect.add(option);
-            });
+    // Load data from localStorage
+    loadTableData();
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        addRow(materialSelect.value, espesorInput.value);
+        saveTableData();
+    });
+
+    btnVaciarTabla.addEventListener('click', () => {
+        while (dataTable.firstChild) {
+            dataTable.removeChild(dataTable.firstChild);
+        }
+        saveTableData();
+    });
+
+    function addRow(material, espesor) {
+        const row = dataTable.insertRow();
+        const orderCell = row.insertCell(0);
+        const materialCell = row.insertCell(1);
+        const espesorCell = row.insertCell(2);
+        const actionsCell = row.insertCell(3);
+
+        orderCell.textContent = dataTable.rows.length;
+        materialCell.textContent = material;
+        espesorCell.textContent = espesor;
+        actionsCell.innerHTML = `<button class="btnEliminar"><i class="fas fa-trash"></i></button>`;
+
+        const deleteButton = actionsCell.querySelector('.btnEliminar');
+        deleteButton.addEventListener('click', () => {
+            row.remove();
+            updateOrder();
+            saveTableData();
         });
 
-    formTabla.addEventListener('submit', function (event) {
-        event.preventDefault();
+        updateOrder();
+    }
 
-        const material = materialSelect.value;
-        const espesor = espesorInput.value;
+    function saveTableData() {
+        const tableData = [];
+        Array.from(dataTable.rows).forEach(row => {
+            const cells = row.cells;
+            tableData.push({
+                order: cells[0].textContent,
+                material: cells[1].textContent,
+                espesor: cells[2].textContent
+            });
+        });
+        localStorage.setItem('tableData', JSON.stringify(tableData));
+    }
 
-        if (material && espesor) {
-            const row = dataTable.insertRow();
+    function loadTableData() {
+        const tableData = JSON.parse(localStorage.getItem('tableData') || '[]');
+        tableData.forEach(item => {
+            addRow(item.material, item.espesor);
+        });
+    }
 
-            const cellMaterial = row.insertCell(0);
-            const cellEspesor = row.insertCell(1);
-            const cellAcciones = row.insertCell(2);
+    function updateOrder() {
+        Array.from(dataTable.rows).forEach((row, index) => {
+            row.cells[0].textContent = index + 1;
+        });
+    }
 
-            cellMaterial.textContent = material;
-            cellEspesor.textContent = espesor;
-            cellAcciones.innerHTML = '<button class="btnEliminar" title="Eliminar"><i class="fas fa-trash-alt"></i></button>';
-
-            espesorInput.value = '';
-        }
-    });
-
-    dataTable.addEventListener('click', function (event) {
-        if (event.target.classList.contains('btnEliminar') || event.target.closest('.btnEliminar')) {
-            const row = event.target.closest('tr');
-            dataTable.removeChild(row);
-        }
-    });
-
-    btnVaciarTabla.addEventListener('click', function () {
-        dataTable.innerHTML = '';
-    });
-
-    // Initialize SortableJS
+    // Make table sortable
     new Sortable(dataTable, {
         animation: 150,
-        handle: 'tr'
+        onEnd: () => {
+            updateOrder();
+            saveTableData();
+        }
     });
 });

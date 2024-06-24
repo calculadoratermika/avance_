@@ -11,15 +11,10 @@ body {
 
 /* Header Styles */
 header {
-    background-color: #8B0000; /* Dark red */
+    background-color: #007bff;
     color: #fff;
     padding: 20px;
     text-align: center;
-    width: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1000;
 }
 
 header h1 {
@@ -33,7 +28,6 @@ header h1 {
     background-color: #d3d3d3; /* Light gray */
     padding: 20px 0;
     position: fixed;
-    top: 60px; /* Adjust for header */
     height: calc(100% - 60px); /* Adjust for header and footer */
     display: flex;
     flex-direction: column;
@@ -78,7 +72,7 @@ header h1 {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-top: 100px; /* Adjust for header */
+    margin-top: 20px;
     flex-grow: 1;
 }
 
@@ -227,7 +221,7 @@ tr.dragging:hover {
 
 /* Footer Styles */
 footer {
-    background-color: #8B0000; /* Dark red */
+    background-color: #007bff;
     color: #fff;
     padding: 10px;
     text-align: center;
@@ -260,5 +254,3 @@ footer a:hover {
 
     #espesor {
         width: calc(100% - 100px); /* Adjust the width of the thickness
-    }
-}
