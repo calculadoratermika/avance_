@@ -250,15 +250,16 @@ footer a:hover {
 /* Responsive Design */
 @media (max-width: 600px) {
     input[type="text"], select, button {
-        width: calc(100% - 20px); /* Adjust width to compensate for padding and margin */
+        width: calc(100% - 20px); /* Ajustar el ancho para compensar el padding y el margen */
         margin-bottom: 10px;
     }
 
     form {
-        flex-direction: column; /* Stack elements in responsive mode */
+        flex-direction: column; /* Apilar elementos en modo responsive */
     }
 
     #espesor {
-        width: calc(100% - 100px); /* Adjust the width of the thickness
+        width: calc(100% - 100px); /* Ajustar el ancho del grosor */
     }
 }
+
