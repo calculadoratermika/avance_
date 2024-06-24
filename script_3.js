@@ -1,23 +1,14 @@
 $(document).ready(function() {
-    // Array para almacenar los datos del CSV
-    var materiales = [];
+    // Datos de ejemplo (simulando los datos de tu base de datos)
+    var materiales = [
+        { categoria: "Categoría A", nombre: "Material 1" },
+        { categoria: "Categoría A", nombre: "Material 2" },
+        { categoria: "Categoría B", nombre: "Material 3" },
+        { categoria: "Categoría B", nombre: "Material 4" },
+        { categoria: "Categoría C", nombre: "Material 5" }
+    ];
 
-    // Función para cargar datos desde el CSV
-    function cargarDatosDesdeCSV() {
-        fetch('datos.csv')
-            .then(response => response.text())
-            .then(data => {
-                Papa.parse(data, {
-                    header: true,
-                    complete: function(results) {
-                        materiales = results.data;
-                        llenarCategorias();
-                    }
-                });
-            });
-    }
-
-    // Llenar el primer select con las categorías únicas
+    // Función para llenar el primer select con las categorías únicas
     function llenarCategorias() {
         var categorias = [];
         $.each(materiales, function(index, material) {
@@ -31,8 +22,12 @@ $(document).ready(function() {
         });
     }
 
-    // Llenar el segundo select con los materiales de la categoría seleccionada
-    function llenarMateriales(categoriaSeleccionada) {
+    // Llenar el primer select al cargar la página
+    llenarCategorias();
+
+    // Evento para cambiar las opciones del segundo select cuando se elige una categoría
+    $('#categoria-select').change(function() {
+        var categoriaSeleccionada = $(this).val();
         $('#material-select').empty().append('<option value="">Selecciona un material</option>').prop('disabled', false);
         $.each(materiales, function(index, material) {
             if (material.categoria === categoriaSeleccionada) {
@@ -42,15 +37,6 @@ $(document).ready(function() {
                 }));
             }
         });
-    }
-
-    // Llenar categorías al cargar la página
-    cargarDatosDesdeCSV();
-
-    // Evento para cambiar las opciones del segundo select cuando se elige una categoría
-    $('#categoria-select').change(function() {
-        var categoriaSeleccionada = $(this).val();
-        llenarMateriales(categoriaSeleccionada);
     });
 });
 
@@ -82,23 +68,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const orderCell = row.insertCell(0);
         const materialCell = row.insertCell(1);
         const espesorCell = row.insertCell(2);
-        const conductividadCell = row.insertCell(3);
-        const densidadCell = row.insertCell(4);
-        const calorEspecificoCell = row.insertCell(5);
-        const actionsCell = row.insertCell(6);
+        const actionsCell = row.insertCell(3);
 
         orderCell.textContent = dataTable.rows.length;
         materialCell.textContent = material;
-
-        // Buscar el material en los datos del CSV para obtener las características
-        const materialData = materiales.find(m => m.nombre === material);
-        if (materialData) {
-            espesorCell.textContent = espesor;
-            conductividadCell.textContent = materialData.conductividad;
-            densidadCell.textContent = materialData.densidad;
-            calorEspecificoCell.textContent = materialData.calor_especifico;
-        }
-
+        espesorCell.textContent = espesor;
         actionsCell.innerHTML = `<button class="btnEliminar"><i class="fas fa-trash"></i></button>`;
 
         const deleteButton = actionsCell.querySelector('.btnEliminar');
@@ -118,10 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
             tableData.push({
                 order: cells[0].textContent,
                 material: cells[1].textContent,
-                espesor: cells[2].textContent,
-                conductividad: cells[3].textContent,
-                densidad: cells[4].textContent,
-                calor_especifico: cells[5].textContent
+                espesor: cells[2].textContent
             });
         });
         localStorage.setItem('tableData', JSON.stringify(tableData));

@@ -1,4 +1,6 @@
-Material Name,Density (kg/m3),Conductivity
-Material A,1000,0.2
-Material B,1200,0.3
-Material C,800,0.15
+categoria,nombre,espesor,conductividad,densidad,calor_especifico
+Categoría A,Material 1,5,0.04,2.7,0.84
+Categoría A,Material 2,8,0.03,2.8,0.82
+Categoría B,Material 3,10,0.05,2.5,0.88
+Categoría B,Material 4,12,0.06,2.4,0.85
+Categoría C,Material 5,15,0.07,2.3,0.86
